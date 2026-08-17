@@ -34,4 +34,4 @@ Extraction looter RPG en Godot 4, en preproducción. 21 sistemas trazados, 17 do
 
 ---
 
-Disponible para proyectos remotos. Escribime por acá o por la comunidad de Skool.
+Disponible para proyectos remotos.
