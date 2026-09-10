@@ -1,0 +1,2091 @@
+<title>Sticky Knife Mesa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Big+Shoulders+Display:wght@600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap">
+
+<style>
+/* ============================================================
+   STICKY KNIFE · MESA
+   Tokens. Diseño dark-first: :root define el tema oscuro
+   completo; los bloques de light lo redefinen.
+   ============================================================ */
+:root{
+  /* --- marca (editable desde la pantalla Marca) --- */
+  --brand-accent:#E0561F;         /* brasa */
+  --brand-accent-lt:#B8431A;      /* brasa sobre fondo claro */
+  --brand-second:#C4862B;         /* resina */
+  --brand-second-lt:#8F5F13;
+
+  /* --- superficies --- */
+  --bg:#0C0D10;
+  --surface:#14161A;
+  --surface-2:#1B1E24;
+  --surface-3:#23272F;
+  --line:#292E37;
+  --line-soft:#1F232A;
+
+  /* --- tinta --- */
+  --ink:#EDEAE4;
+  --ink-2:#98A0AB;
+  --ink-3:#646C78;
+
+  /* --- acentos --- */
+  --ember:var(--brand-accent);
+  --ember-wash:color-mix(in oklab, var(--brand-accent) 16%, transparent);
+  --ember-line:color-mix(in oklab, var(--brand-accent) 42%, transparent);
+  --resin:var(--brand-second);
+  --resin-wash:color-mix(in oklab, var(--brand-second) 15%, transparent);
+
+  /* --- semánticos (independientes del acento) --- */
+  --ok:#5C9A70;
+  --ok-wash:rgba(92,154,112,.15);
+  --warn:#C4862B;
+  --warn-wash:rgba(196,134,43,.15);
+  --alert:#C8503F;
+  --alert-wash:rgba(200,80,63,.15);
+
+  /* --- series de gráficos (validadas para este fondo) --- */
+  --chart-in:#C4862B;
+  --chart-out:#2196B8;
+  --chart-grid:#262B33;
+
+  --shadow:0 1px 2px rgba(0,0,0,.5), 0 8px 28px -12px rgba(0,0,0,.7);
+  --shadow-lift:0 2px 4px rgba(0,0,0,.5), 0 18px 44px -16px rgba(0,0,0,.8);
+
+  --r-sm:6px; --r:10px; --r-lg:16px; --r-pill:999px;
+
+  --f-display:"Big Shoulders Display","Archivo Narrow",system-ui,sans-serif;
+  --f-body:"Archivo",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,monospace;
+
+  color-scheme:dark;
+}
+
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="dark"]){
+    --bg:#F1EEE8;
+    --surface:#FBFAF6;
+    --surface-2:#FFFFFF;
+    --surface-3:#F3F0E9;
+    --line:#DFDACF;
+    --line-soft:#EAE6DC;
+    --ink:#15171B;
+    --ink-2:#565D67;
+    --ink-3:#878E99;
+    --ember:var(--brand-accent-lt);
+    --ember-wash:color-mix(in oklab, var(--brand-accent-lt) 12%, transparent);
+    --ember-line:color-mix(in oklab, var(--brand-accent-lt) 38%, transparent);
+    --resin:var(--brand-second-lt);
+    --resin-wash:color-mix(in oklab, var(--brand-second-lt) 12%, transparent);
+    --ok:#3E7A52; --ok-wash:rgba(62,122,82,.13);
+    --warn:#8F5F13; --warn-wash:rgba(143,95,19,.13);
+    --alert:#A83828; --alert-wash:rgba(168,56,40,.13);
+    --chart-in:#9C6414;
+    --chart-out:#0079A8;
+    --chart-grid:#E2DDD2;
+    --shadow:0 1px 2px rgba(40,32,20,.07), 0 8px 26px -14px rgba(40,32,20,.24);
+    --shadow-lift:0 2px 5px rgba(40,32,20,.09), 0 18px 40px -18px rgba(40,32,20,.32);
+    color-scheme:light;
+  }
+}
+:root[data-theme="light"]{
+  --bg:#F1EEE8;
+  --surface:#FBFAF6;
+  --surface-2:#FFFFFF;
+  --surface-3:#F3F0E9;
+  --line:#DFDACF;
+  --line-soft:#EAE6DC;
+  --ink:#15171B;
+  --ink-2:#565D67;
+  --ink-3:#878E99;
+  --ember:var(--brand-accent-lt);
+  --ember-wash:color-mix(in oklab, var(--brand-accent-lt) 12%, transparent);
+  --ember-line:color-mix(in oklab, var(--brand-accent-lt) 38%, transparent);
+  --resin:var(--brand-second-lt);
+  --resin-wash:color-mix(in oklab, var(--brand-second-lt) 12%, transparent);
+  --ok:#3E7A52; --ok-wash:rgba(62,122,82,.13);
+  --warn:#8F5F13; --warn-wash:rgba(143,95,19,.13);
+  --alert:#A83828; --alert-wash:rgba(168,56,40,.13);
+  --chart-in:#9C6414;
+  --chart-out:#0079A8;
+  --chart-grid:#E2DDD2;
+  --shadow:0 1px 2px rgba(40,32,20,.07), 0 8px 26px -14px rgba(40,32,20,.24);
+  --shadow-lift:0 2px 5px rgba(40,32,20,.09), 0 18px 40px -18px rgba(40,32,20,.32);
+  color-scheme:light;
+}
+
+/* ============================================================ base */
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:var(--f-body); font-size:15px; line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{margin:0; text-wrap:balance; font-weight:700}
+p{margin:0}
+button{font:inherit; color:inherit; background:none; border:none; cursor:pointer}
+input,select,textarea{font:inherit; color:inherit}
+a{color:var(--ember)}
+:focus-visible{outline:2px solid var(--ember); outline-offset:2px; border-radius:4px}
+::selection{background:var(--ember-wash); color:var(--ink)}
+.mono{font-family:var(--f-mono); font-variant-numeric:tabular-nums}
+.num{font-family:var(--f-mono); font-variant-numeric:tabular-nums; letter-spacing:-.02em}
+
+.eyebrow{
+  font-family:var(--f-display); font-weight:700; font-size:12px;
+  letter-spacing:.14em; text-transform:uppercase; color:var(--ink-3);
+}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ============================================================ shell */
+.app{display:flex; min-height:100vh}
+
+/* --- riel lateral --- */
+.rail{
+  position:sticky; top:0; height:100vh; flex:0 0 232px;
+  background:var(--surface); border-right:1px solid var(--line);
+  display:flex; flex-direction:column; gap:4px; padding:20px 12px;
+  z-index:30;
+}
+.brandmark{
+  display:flex; align-items:center; gap:10px; padding:4px 8px 18px;
+}
+.brandmark .logo{
+  width:38px; height:38px; flex:0 0 38px; border-radius:9px;
+  display:grid; place-items:center; overflow:hidden;
+  background:var(--surface-3); border:1px solid var(--line);
+}
+.brandmark .logo img{width:100%;height:100%;object-fit:cover;display:block}
+.brandmark .logo svg{width:26px;height:26px;display:block}
+.brandmark .bn{display:flex;flex-direction:column;min-width:0}
+.brandmark .bn b{
+  font-family:var(--f-display); font-weight:800; font-size:19px;
+  letter-spacing:.02em; line-height:1; text-transform:uppercase;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.brandmark .bn span{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3);margin-top:3px}
+
+.navbtn{
+  display:flex; align-items:center; gap:11px;
+  padding:9px 11px; border-radius:var(--r); color:var(--ink-2);
+  font-weight:500; font-size:14.5px; text-align:left; width:100%;
+  transition:background .13s, color .13s;
+}
+.navbtn svg{width:18px;height:18px;flex:0 0 18px;stroke-width:1.7}
+.navbtn:hover{background:var(--surface-2); color:var(--ink)}
+.navbtn[aria-current="true"]{background:var(--ember-wash); color:var(--ember); font-weight:600}
+.navbtn .tag{
+  margin-left:auto; font-family:var(--f-mono); font-size:11px;
+  background:var(--surface-3); color:var(--ink-2);
+  padding:1px 6px; border-radius:var(--r-pill);
+}
+.navbtn[aria-current="true"] .tag{background:var(--ember-line);color:var(--ink)}
+.rail-foot{margin-top:auto; display:flex; flex-direction:column; gap:4px; padding-top:14px; border-top:1px solid var(--line-soft)}
+.rail-note{font-size:11.5px;color:var(--ink-3);padding:2px 11px;display:flex;align-items:center;gap:6px}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--ink-3);flex:0 0 6px}
+.dot.live{background:var(--ok)}
+
+/* --- contenido --- */
+.main{flex:1 1 auto; min-width:0; display:flex; flex-direction:column}
+.topbar{
+  position:sticky; top:0; z-index:20;
+  background:color-mix(in oklab, var(--bg) 88%, transparent);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--line);
+  padding-block:14px;
+}
+.wrap{width:100%; max-width:1180px; margin-inline:auto; padding-inline:20px}
+.topbar .wrap{display:flex; align-items:center; gap:14px}
+.topbar h1{
+  font-family:var(--f-display); font-weight:800; font-size:30px;
+  letter-spacing:.01em; text-transform:uppercase; line-height:1;
+}
+.topbar .sub{font-size:13px;color:var(--ink-2);margin-top:3px}
+.topbar .grow{flex:1 1 auto;min-width:0}
+.content{padding-block:24px 96px; flex:1 1 auto}
+
+/* --- botones --- */
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:7px;
+  padding:8px 14px; border-radius:var(--r); font-weight:600; font-size:14px;
+  border:1px solid var(--line); background:var(--surface-2); color:var(--ink);
+  white-space:nowrap; transition:background .13s,border-color .13s,transform .08s;
+}
+.btn:hover{background:var(--surface-3); border-color:var(--ink-3)}
+.btn:active{transform:translateY(1px)}
+.btn svg{width:16px;height:16px;stroke-width:1.9}
+.btn.pri{background:var(--ember); border-color:var(--ember); color:#fff}
+.btn.pri:hover{background:color-mix(in oklab,var(--ember) 86%, #000); border-color:color-mix(in oklab,var(--ember) 86%, #000)}
+.btn.ghost{background:transparent;border-color:transparent;color:var(--ink-2)}
+.btn.ghost:hover{background:var(--surface-2);color:var(--ink)}
+.btn.sm{padding:5px 10px;font-size:13px;border-radius:var(--r-sm)}
+.btn.danger{color:var(--alert);border-color:transparent}
+.btn.danger:hover{background:var(--alert-wash);border-color:transparent}
+.btn[disabled]{opacity:.45;pointer-events:none}
+
+/* --- tarjetas --- */
+.card{
+  background:var(--surface); border:1px solid var(--line);
+  border-radius:var(--r-lg); box-shadow:var(--shadow);
+}
+.card-h{
+  display:flex; align-items:center; gap:12px;
+  padding:15px 18px; border-bottom:1px solid var(--line-soft);
+}
+.card-h h3{font-family:var(--f-display);font-weight:700;font-size:19px;letter-spacing:.03em;text-transform:uppercase}
+.card-h .grow{flex:1 1 auto;min-width:0}
+.card-b{padding:18px}
+.card-b.flush{padding:0}
+
+/* --- grillas --- */
+.grid{display:grid; gap:14px}
+.g-stats{grid-template-columns:repeat(auto-fit,minmax(190px,1fr))}
+.g-2{grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
+.g-cards{grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
+.stack{display:flex;flex-direction:column;gap:14px}
+.row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+
+/* --- tiles de cifra --- */
+.tile{
+  background:var(--surface); border:1px solid var(--line); border-radius:var(--r-lg);
+  padding:15px 17px 16px; display:flex; flex-direction:column; gap:5px;
+  position:relative; overflow:hidden;
+}
+.tile .lab{font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);font-weight:600}
+.tile .val{
+  font-family:var(--f-display); font-weight:800; font-size:37px; line-height:1;
+  letter-spacing:.005em; font-variant-numeric:tabular-nums;
+}
+.tile .val small{font-size:.52em;font-weight:700;color:var(--ink-3);letter-spacing:.04em}
+.tile .foot{font-size:12.5px;color:var(--ink-2);display:flex;align-items:center;gap:6px}
+.tile.accent .val{color:var(--ember)}
+.tile.in .val{color:var(--chart-in)}
+.tile.out .val{color:var(--chart-out)}
+.tile.pos .val{color:var(--ok)}
+.tile.neg .val{color:var(--alert)}
+
+/* --- pills / estados --- */
+.pill{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:2px 9px;border-radius:var(--r-pill);
+  font-size:11.5px;font-weight:600;letter-spacing:.04em;
+  border:1px solid transparent; white-space:nowrap;
+}
+.pill .bullet{width:6px;height:6px;border-radius:50%;background:currentColor;flex:0 0 6px}
+.pill.libre{color:var(--ink-3);border-color:var(--line);background:var(--surface-2)}
+.pill.sena{color:var(--warn);background:var(--warn-wash);border-color:color-mix(in oklab,var(--warn) 30%,transparent)}
+.pill.pago{color:var(--ok);background:var(--ok-wash);border-color:color-mix(in oklab,var(--ok) 30%,transparent)}
+.pill.vino{color:var(--ember);background:var(--ember-wash);border-color:var(--ember-line)}
+.pill.falto{color:var(--alert);background:var(--alert-wash);border-color:color-mix(in oklab,var(--alert) 30%,transparent)}
+.pill.neutral{color:var(--ink-2);background:var(--surface-3);border-color:var(--line)}
+
+/* ============================================================ LA MESA */
+.mesa-wrap{position:relative;padding:8px 0 4px}
+.mesa{position:relative;width:100%;max-width:680px;margin-inline:auto;aspect-ratio:680/400}
+.mesa svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.mesa-top{
+  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  text-align:center;pointer-events:none;width:52%;
+}
+.mesa-top .t1{font-family:var(--f-display);font-weight:800;font-size:clamp(26px,4.4vw,42px);line-height:.95;letter-spacing:.02em;text-transform:uppercase}
+.mesa-top .t2{font-size:12px;color:var(--ink-3);letter-spacing:.12em;text-transform:uppercase;margin-top:6px;font-weight:600}
+.mesa-top .t3{font-family:var(--f-mono);font-size:12.5px;color:var(--ink-2);margin-top:7px}
+
+.seat{
+  position:absolute; transform:translate(-50%,-50%);
+  width:64px; display:flex; flex-direction:column; align-items:center; gap:4px;
+  cursor:pointer;
+}
+.seat .disc{
+  width:44px;height:44px;border-radius:50%;
+  display:grid;place-items:center;
+  font-family:var(--f-display);font-weight:800;font-size:16px;letter-spacing:.03em;
+  background:var(--surface-2); border:2px dashed var(--line);
+  color:var(--ink-3);
+  transition:transform .14s cubic-bezier(.34,1.4,.64,1), box-shadow .14s, border-color .14s;
+}
+.seat .nm{
+  font-size:10.5px;line-height:1.15;text-align:center;color:var(--ink-2);
+  max-width:66px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:500;
+}
+.seat .idx{
+  position:absolute;top:-3px;right:6px;
+  font-family:var(--f-mono);font-size:9px;color:var(--ink-3);
+  background:var(--bg);border-radius:var(--r-pill);padding:0 3px;
+}
+.seat:hover .disc{transform:scale(1.09)}
+.seat.sena .disc{border-style:solid;border-color:var(--warn);color:var(--warn);background:var(--warn-wash)}
+.seat.pago .disc{border-style:solid;border-color:var(--ok);color:var(--ok);background:var(--ok-wash)}
+.seat.vino .disc{border-style:solid;border-color:var(--ember);color:#fff;background:var(--ember)}
+.seat.falto .disc{border-style:solid;border-color:var(--alert);color:var(--alert);background:var(--alert-wash);opacity:.72}
+.seat.sel .disc{box-shadow:0 0 0 3px var(--bg), 0 0 0 5px var(--ember)}
+
+/* mesa en formato banquete (muchos cupos) */
+.banquete{display:grid;grid-template-columns:repeat(auto-fill,minmax(74px,1fr));gap:12px;padding:6px 2px}
+.banquete .seat{position:relative;transform:none;width:auto}
+
+.mesa-leyenda{
+  display:flex;flex-wrap:wrap;gap:6px 14px;justify-content:center;
+  padding:14px 4px 2px;border-top:1px solid var(--line-soft);margin-top:10px;
+}
+.lg{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--ink-2)}
+.lg i{width:11px;height:11px;border-radius:50%;border:2px solid var(--line);background:var(--surface-2);flex:0 0 11px}
+.lg.sena i{border-color:var(--warn);background:var(--warn-wash)}
+.lg.pago i{border-color:var(--ok);background:var(--ok-wash)}
+.lg.vino i{border-color:var(--ember);background:var(--ember)}
+.lg.falto i{border-color:var(--alert);background:var(--alert-wash)}
+
+/* ============================================================ listas */
+.list{display:flex;flex-direction:column}
+.item{
+  display:flex;align-items:center;gap:13px;
+  padding:12px 18px;border-bottom:1px solid var(--line-soft);
+  text-align:left;width:100%;transition:background .12s;
+}
+.item:last-child{border-bottom:none}
+.item:hover{background:var(--surface-2)}
+.item .grow{flex:1 1 auto;min-width:0}
+.item .ttl{font-weight:600;font-size:14.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.item .sub{font-size:12.5px;color:var(--ink-2);margin-top:2px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.item .amt{font-family:var(--f-mono);font-variant-numeric:tabular-nums;font-size:14px;font-weight:500;white-space:nowrap}
+.avatar{
+  width:36px;height:36px;flex:0 0 36px;border-radius:10px;
+  display:grid;place-items:center;font-family:var(--f-display);font-weight:800;font-size:14px;
+  background:var(--surface-3);color:var(--ink-2);border:1px solid var(--line);letter-spacing:.03em;
+}
+.avatar.on{background:var(--ember-wash);color:var(--ember);border-color:var(--ember-line)}
+.stripe{width:3px;align-self:stretch;border-radius:2px;background:var(--line);flex:0 0 3px}
+.stripe.in{background:var(--chart-in)}
+.stripe.out{background:var(--chart-out)}
+
+.empty{
+  padding:44px 24px;text-align:center;color:var(--ink-2);
+  display:flex;flex-direction:column;align-items:center;gap:12px;
+}
+.empty svg{width:32px;height:32px;stroke-width:1.4;color:var(--ink-3)}
+.empty p{font-size:14px;max-width:38ch}
+
+/* ============================================================ pasos */
+.paso{
+  display:grid;grid-template-columns:auto 1fr;gap:0 16px;
+  padding:15px 18px;border-bottom:1px solid var(--line-soft);
+}
+.paso:last-child{border-bottom:none}
+.paso .n{
+  font-family:var(--f-display);font-weight:800;font-size:26px;line-height:1;
+  color:var(--ember);width:34px;text-align:right;font-variant-numeric:tabular-nums;
+  padding-top:2px;
+}
+.paso .plato{font-weight:600;font-size:15.5px}
+.paso .maridaje{
+  margin-top:8px;padding:9px 12px;border-radius:var(--r);
+  background:var(--resin-wash);border:1px solid color-mix(in oklab,var(--resin) 26%,transparent);
+  display:flex;flex-wrap:wrap;gap:5px 12px;align-items:baseline;
+}
+.paso .maridaje .ex{font-weight:600;font-size:14px;color:var(--resin)}
+.paso .maridaje .meta{font-family:var(--f-mono);font-size:12px;color:var(--ink-2);display:flex;gap:10px;flex-wrap:wrap}
+.paso .nota{font-size:13px;color:var(--ink-2);margin-top:7px;font-style:italic}
+.paso .acts{grid-column:2;margin-top:9px;display:flex;gap:6px}
+
+/* ============================================================ gráficos */
+.chart{width:100%}
+.barrow{
+  display:grid;grid-template-columns:minmax(88px,1.1fr) 3fr auto;
+  gap:10px 12px;align-items:center;padding:9px 0;
+}
+.barrow .cn{font-size:13px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.barrow .cn small{display:block;font-weight:400;color:var(--ink-3);font-size:11px;font-family:var(--f-mono)}
+.bars{display:flex;flex-direction:column;gap:3px;min-width:0}
+.bar{height:13px;border-radius:0 4px 4px 0;position:relative;min-width:2px;transition:filter .12s}
+.bar:hover{filter:brightness(1.14)}
+.bar.in{background:var(--chart-in)}
+.bar.out{background:var(--chart-out)}
+.bar.solo{height:22px;border-radius:0 5px 5px 0}
+.barrow .mg{font-family:var(--f-mono);font-size:13px;font-weight:500;text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.baseline{border-left:2px solid var(--chart-grid);padding-left:0;margin-left:0}
+.legend{display:flex;gap:16px;flex-wrap:wrap;padding-bottom:4px}
+.legend .li{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;color:var(--ink-2);font-weight:500}
+.legend .sw{width:11px;height:11px;border-radius:3px;flex:0 0 11px}
+.legend .sw.in{background:var(--chart-in)}
+.legend .sw.out{background:var(--chart-out)}
+.scaleline{
+  display:flex;justify-content:space-between;font-family:var(--f-mono);
+  font-size:11px;color:var(--ink-3);border-top:1px solid var(--chart-grid);
+  padding-top:5px;margin-top:6px;
+}
+.catrow{display:grid;grid-template-columns:1fr auto;gap:4px 12px;padding:8px 0}
+.catrow .lab{font-size:13px;font-weight:500}
+.catrow .amt{font-family:var(--f-mono);font-size:13px;font-variant-numeric:tabular-nums;text-align:right}
+.catrow .track{grid-column:1/-1;height:9px;background:var(--surface-3);border-radius:0 4px 4px 0;overflow:hidden}
+.catrow .fill{display:block;height:100%;background:var(--ember);border-radius:0 4px 4px 0;transition:filter .12s}
+.catrow:hover .fill{filter:brightness(1.12)}
+
+#tip{
+  position:fixed;z-index:200;pointer-events:none;opacity:0;
+  background:var(--surface-2);border:1px solid var(--line);border-radius:var(--r-sm);
+  box-shadow:var(--shadow-lift);padding:7px 10px;font-size:12.5px;
+  transition:opacity .1s;max-width:230px;
+}
+#tip b{font-family:var(--f-mono);font-weight:500;display:block;margin-top:2px}
+
+/* ============================================================ formularios */
+.field{display:flex;flex-direction:column;gap:5px}
+.field label{font-size:12px;font-weight:600;color:var(--ink-2);letter-spacing:.03em}
+.field .hint{font-size:11.5px;color:var(--ink-3)}
+.inp{
+  background:var(--surface-2);border:1px solid var(--line);border-radius:var(--r-sm);
+  padding:8px 11px;font-size:14px;width:100%;transition:border-color .12s,background .12s;
+}
+.inp:focus{outline:none;border-color:var(--ember);background:var(--surface)}
+textarea.inp{resize:vertical;min-height:64px;line-height:1.45}
+select.inp{cursor:pointer}
+.inp.mono{font-family:var(--f-mono)}
+.fgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:13px}
+.fgrid .wide{grid-column:1/-1}
+.seg{display:inline-flex;background:var(--surface-3);border-radius:var(--r);padding:3px;gap:2px;border:1px solid var(--line)}
+.seg button{padding:5px 12px;border-radius:7px;font-size:13px;font-weight:600;color:var(--ink-2);white-space:nowrap}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+.searchbox{position:relative;flex:1 1 200px;max-width:340px}
+.searchbox svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);width:15px;height:15px;color:var(--ink-3);stroke-width:1.9;pointer-events:none}
+.searchbox .inp{padding-left:31px}
+
+/* ============================================================ modal */
+.scrim{
+  position:fixed;inset:0;z-index:100;background:rgba(6,7,9,.62);
+  backdrop-filter:blur(3px);display:grid;place-items:end center;
+  padding:0;
+}
+.scrim[hidden]{display:none!important}
+.sheet{
+  background:var(--surface);width:100%;max-width:560px;
+  border:1px solid var(--line);border-bottom:none;
+  border-radius:var(--r-lg) var(--r-lg) 0 0;
+  box-shadow:var(--shadow-lift);max-height:92vh;display:flex;flex-direction:column;
+  animation:rise .22s cubic-bezier(.2,.9,.3,1);
+}
+@keyframes rise{from{transform:translateY(16px);opacity:0}to{transform:none;opacity:1}}
+@media (min-width:700px){
+  .scrim{place-items:center;padding:24px}
+  .sheet{border-radius:var(--r-lg);border-bottom:1px solid var(--line);max-height:86vh}
+}
+.sheet-h{display:flex;align-items:center;gap:12px;padding:16px 20px;border-bottom:1px solid var(--line-soft)}
+.sheet-h h3{font-family:var(--f-display);font-weight:800;font-size:22px;letter-spacing:.02em;text-transform:uppercase;flex:1 1 auto}
+.sheet-b{padding:20px;overflow-y:auto;display:flex;flex-direction:column;gap:16px}
+.sheet-f{display:flex;gap:9px;padding:14px 20px;border-top:1px solid var(--line-soft);background:var(--surface-2);border-radius:0 0 var(--r-lg) var(--r-lg)}
+.sheet-f .grow{flex:1 1 auto}
+.iconbtn{width:32px;height:32px;border-radius:8px;display:grid;place-items:center;color:var(--ink-2)}
+.iconbtn:hover{background:var(--surface-3);color:var(--ink)}
+.iconbtn svg{width:17px;height:17px;stroke-width:1.9}
+
+/* ============================================================ avisos */
+.banner{
+  display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+  padding:11px 16px;border-radius:var(--r);margin-bottom:16px;
+  background:var(--resin-wash);border:1px solid color-mix(in oklab,var(--resin) 30%,transparent);
+  font-size:13.5px;
+}
+.banner .grow{flex:1 1 240px;min-width:0}
+.banner b{color:var(--resin)}
+.alertline{
+  display:flex;align-items:flex-start;gap:9px;padding:10px 14px;
+  border-bottom:1px solid var(--line-soft);font-size:13.5px;
+}
+.alertline:last-child{border-bottom:none}
+.alertline .ic{width:16px;height:16px;flex:0 0 16px;margin-top:2px;stroke-width:1.9}
+.alertline.w .ic{color:var(--warn)}
+.alertline.a .ic{color:var(--alert)}
+.alertline.i .ic{color:var(--chart-out)}
+
+#toast{
+  position:fixed;left:50%;bottom:26px;transform:translate(-50%,14px);
+  z-index:300;background:var(--ink);color:var(--bg);
+  padding:9px 16px;border-radius:var(--r-pill);font-size:13.5px;font-weight:600;
+  box-shadow:var(--shadow-lift);opacity:0;pointer-events:none;transition:opacity .18s,transform .18s;
+}
+#toast.on{opacity:1;transform:translate(-50%,0)}
+
+/* ============================================================ chips de swatch */
+.swatch{display:flex;align-items:center;gap:9px}
+.swatch input[type=color]{
+  width:38px;height:34px;padding:2px;border:1px solid var(--line);
+  border-radius:var(--r-sm);background:var(--surface-2);cursor:pointer;flex:0 0 38px;
+}
+.logo-drop{
+  display:flex;align-items:center;gap:14px;padding:14px;
+  border:1px dashed var(--line);border-radius:var(--r);background:var(--surface-2);
+}
+.logo-prev{
+  width:64px;height:64px;flex:0 0 64px;border-radius:12px;overflow:hidden;
+  display:grid;place-items:center;background:var(--surface-3);border:1px solid var(--line);
+}
+.logo-prev img{width:100%;height:100%;object-fit:cover;display:block}
+.logo-prev svg{width:38px;height:38px}
+
+/* ============================================================ tabs móviles */
+.tabbar{display:none}
+@media (max-width:900px){
+  .rail{
+    position:fixed;bottom:0;left:0;right:0;top:auto;height:auto;
+    flex-direction:row;padding:0;border-right:none;border-top:1px solid var(--line);
+    gap:0;
+  }
+  .rail .brandmark,.rail-foot{display:none}
+  .navbtn{
+    flex-direction:column;gap:3px;padding:9px 4px 10px;border-radius:0;
+    font-size:10.5px;letter-spacing:.02em;justify-content:center;text-align:center;
+  }
+  .navbtn svg{width:20px;height:20px;flex:0 0 20px}
+  .navbtn .tag{display:none}
+  .navbtn[aria-current="true"]{background:transparent;box-shadow:inset 0 2px 0 var(--ember)}
+  .main{padding-bottom:64px}
+  .topbar h1{font-size:25px}
+  .content{padding-bottom:36px}
+  .tabbar{display:flex}
+}
+@media (max-width:520px){
+  .wrap{padding-inline:16px}
+  .tile .val{font-size:31px}
+  .barrow{grid-template-columns:1fr auto;gap:4px 10px}
+  .barrow .bars{grid-column:1/-1}
+  .sheet-f{flex-wrap:wrap}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
+}
+</style>
+
+<div class="app">
+  <!-- ================= RIEL ================= -->
+  <nav class="rail" aria-label="Secciones">
+    <div class="brandmark">
+      <span class="logo" id="railLogo"></span>
+      <span class="bn"><b id="railName">Sticky Knife</b><span>Mesa</span></span>
+    </div>
+    <button class="navbtn" data-go="inicio" aria-current="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 4l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/><path d="M9 21v-7h6v7"/></svg>
+      <span>Hoy</span>
+    </button>
+    <button class="navbtn" data-go="cenas">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h16"/><path d="M7 3v3"/><path d="M17 3v3"/><rect x="3" y="6" width="18" height="15" rx="2"/><path d="M8 13h3"/><path d="M8 17h8"/></svg>
+      <span>Cenas</span><span class="tag" id="tagCenas">0</span>
+    </button>
+    <button class="navbtn" data-go="comensales">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5"/><path d="M16 5.6a3.2 3.2 0 0 1 0 5.9"/><path d="M18 14.9c2 .7 3.5 2.4 3.5 5.1"/></svg>
+      <span>Comensales</span><span class="tag" id="tagComensales">0</span>
+    </button>
+    <button class="navbtn" data-go="numeros">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10"/><path d="M10 20V4"/><path d="M16 20v-7"/><path d="M22 20H2"/></svg>
+      <span>Números</span>
+    </button>
+    <button class="navbtn" data-go="marca">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.4"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg>
+      <span>Marca</span>
+    </button>
+    <div class="rail-foot">
+      <button class="navbtn" id="themeBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7z"/></svg>
+        <span id="themeLbl">Tema</span>
+      </button>
+      <div class="rail-note"><span class="dot" id="syncDot"></span><span id="syncLbl">Guardado local</span></div>
+    </div>
+  </nav>
+
+  <!-- ================= MAIN ================= -->
+  <div class="main">
+    <header class="topbar">
+      <div class="wrap">
+        <button class="iconbtn" id="backBtn" hidden aria-label="Volver">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>
+        </button>
+        <div class="grow">
+          <h1 id="scrTitle">Hoy</h1>
+          <div class="sub" id="scrSub"></div>
+        </div>
+        <div id="scrActions" class="row"></div>
+      </div>
+    </header>
+    <main class="content"><div class="wrap" id="view"></div></main>
+  </div>
+</div>
+
+<div class="scrim" id="scrim" hidden></div>
+<div id="tip" role="status"></div>
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* ============================================================
+   STICKY KNIFE · MESA
+   Panel de reservas, mesa y cuentas para cenas de pasos
+   con cata de extractos.
+   ============================================================ */
+(function(){
+"use strict";
+
+/* ---------------------------------------------------------- utils */
+const $  = (s,r)=> (r||document).querySelector(s);
+const $$ = (s,r)=> Array.from((r||document).querySelectorAll(s));
+const uid = p => (p||"x")+"-"+Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+const esc = s => String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
+const sum = (a,f)=> a.reduce((t,x)=>t+(Number(f?f(x):x)||0),0);
+
+function money(n,opts){
+  const v = Math.round(Number(n)||0);
+  const cur = state.marca.moneda || "ARS";
+  try{
+    return new Intl.NumberFormat("es-AR",{
+      style:"currency", currency:cur, maximumFractionDigits:0,
+      notation:(opts&&opts.corto&&Math.abs(v)>=1e6)?"compact":"standard"
+    }).format(v);
+  }catch(e){ return "$"+v.toLocaleString("es-AR"); }
+}
+function moneyPlain(n){ return (Math.round(Number(n)||0)).toLocaleString("es-AR"); }
+
+const MESES=["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];
+const DIAS=["domingo","lunes","martes","miércoles","jueves","viernes","sábado"];
+function d(iso){ const [y,m,dd]=String(iso||"").split("-").map(Number); return new Date(y||1970,(m||1)-1,dd||1); }
+function fechaLarga(iso){ const x=d(iso); return DIAS[x.getDay()]+" "+x.getDate()+" de "+["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"][x.getMonth()]; }
+function fechaCorta(iso){ const x=d(iso); return x.getDate()+" "+MESES[x.getMonth()]; }
+function fechaMes(iso){ const x=d(iso); return MESES[x.getMonth()]+" "+x.getFullYear(); }
+function hoyISO(){ const n=new Date(); return n.getFullYear()+"-"+String(n.getMonth()+1).padStart(2,"0")+"-"+String(n.getDate()).padStart(2,"0"); }
+function mesDe(iso){ return String(iso||"").slice(0,7); }
+function diasHasta(iso){
+  const a=d(hoyISO()), b=d(iso);
+  return Math.round((b-a)/86400000);
+}
+function iniciales(nombre){
+  const p=String(nombre||"").trim().split(/\s+/).filter(Boolean);
+  if(!p.length) return "—";
+  return (p[0][0]+(p.length>1?p[p.length-1][0]:"")).toUpperCase();
+}
+
+/* ---------------------------------------------------------- iconos */
+const I = {
+  mas:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>',
+  lapiz:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9a2.1 2.1 0 0 0-3-3L5 17z"/><path d="M15 6l3 3"/></svg>',
+  tacho:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16"/><path d="M9 7V5h6v2"/><path d="M6 7l1 13h10l1-13"/></svg>',
+  x:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+  lupa:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg>',
+  reloj:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>',
+  alerta:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4.5 2.8 20h18.4z"/><path d="M12 10v4"/><path d="M12 17.2v.1"/></svg>',
+  plato:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="3.6"/></svg>',
+  info:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 11v5"/><path d="M12 8v.1"/></svg>',
+  plata:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="6" width="19" height="12" rx="2"/><circle cx="12" cy="12" r="2.6"/></svg>',
+  baja:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="M6 13l6 6 6-6"/></svg>',
+  copia:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/></svg>',
+  cuchillo:'<svg viewBox="0 0 32 32" fill="none"><path d="M5 21.5 21.5 5c1.6 3.4 2 6.6 1.2 9.6-.8 3-2.7 5.7-5.6 8.1L14 25.6a1.4 1.4 0 0 1-1.9-.1l-7-7a1.4 1.4 0 0 1-.1-1.9z" fill="currentColor" opacity=".92"/><path d="M12.4 24.8 8 29.2a2 2 0 0 1-2.8-2.8l4.4-4.4z" fill="currentColor" opacity=".55"/><circle cx="24.5" cy="22.5" r="3.6" fill="var(--brand-second)"/></svg>'
+};
+
+/* ---------------------------------------------------------- constantes */
+const CAT_GASTO = ["Insumos","Extractos","Bebidas","Espacio","Equipo humano","Equipamiento","Difusión","Otros"];
+const CAT_INGRESO = ["Merchandising","Colaboración","Propinas","Otros"];
+const ESTADOS = {
+  libre:{lbl:"Libre",cls:"libre"},
+  sena:{lbl:"Señó",cls:"sena"},
+  pago:{lbl:"Pagó",cls:"pago"},
+  vino:{lbl:"Vino",cls:"vino"},
+  falto:{lbl:"No vino",cls:"falto"}
+};
+const TOLERANCIAS = ["Baja","Media","Alta"];
+const TIPOS_EXTRACTO = ["Live rosin","Hash rosin","Bubble hash","Static sift","Live resin","BHO","Charas","Otro"];
+
+/* ---------------------------------------------------------- estado */
+const MARCA_DEF = {
+  nombre:"Sticky Knife",
+  acento:"#E0561F",
+  acentoClaro:"#B8431A",
+  segundo:"#C4862B",
+  segundoClaro:"#8F5F13",
+  moneda:"ARS",
+  precioDefault:98000,
+  senaDefault:40000,
+  logoUrl:"",
+  logoAssetId:""
+};
+let state = {
+  demo:false,
+  cenas:[], reservas:[], pasos:[], comensales:[], movimientos:[],
+  marca:Object.assign({},MARCA_DEF)
+};
+let ui = { scr:"inicio", cenaId:null, comensalId:null, q:"", qc:"", mes:mesDe(hoyISO()), filtroCenas:"proximas", tabCena:"mesa" };
+
+/* ---------------------------------------------------------- datos de ejemplo */
+function demoData(){
+  const C = [
+    {id:"c1",nombre:"Cena 08 · Primavera en Vivo",fecha:"2026-09-26",hora:"20:30",lugar:"Loft en Villa Crespo",cupos:10,precio:98000,sena:40000,estado:"abierta",notas:"Llega hielo seco 19:00. Confirmar el proyector con Nacho."},
+    {id:"c2",nombre:"Cena 09 · Hachís Tradicional",fecha:"2026-10-17",hora:"20:30",lugar:"A confirmar",cupos:12,precio:105000,sena:45000,estado:"borrador",notas:"Idea: cata comparada de charas, dry sift y bubble."},
+    {id:"c3",nombre:"Cena 07 · Solventless",fecha:"2026-08-22",hora:"20:30",lugar:"Loft en Villa Crespo",cupos:10,precio:92000,sena:38000,estado:"cerrada",notas:"Salió redonda. Repetir el paso de la provoleta."}
+  ];
+  const P = [
+    {id:"p1",cenaId:"c1",n:1,plato:"Escabeche de mejillones, hinojo y limón",extracto:"Papaya Cake",tipo:"Hash rosin",micras:"90µ",temp:195,terps:"limoneno · pineno",nota:"Cítrico y graso. Abre el paladar sin taparlo."},
+    {id:"p2",cenaId:"c1",n:2,plato:"Sopa fría de arvejas, menta y burrata",extracto:"Mint Chip",tipo:"Static sift",micras:"—",temp:180,terps:"mentol · cariofileno",nota:"Baja temperatura para que quede todo el mentol."},
+    {id:"p3",cenaId:"c1",n:3,plato:"Provoleta ahumada con miel de romero",extracto:"Sherbhead",tipo:"Live rosin",micras:"73-90µ",temp:200,terps:"limoneno · linalol",nota:"El paso que todos recuerdan. No apurarlo."},
+    {id:"p4",cenaId:"c1",n:4,plato:"Ojo de bife madurado 21 días, chimichurri de hierbas frescas",extracto:"GMO Cookies",tipo:"Live resin",micras:"—",temp:215,terps:"cariofileno · humuleno",nota:"Terroso y sulfuroso, aguanta la carne madurada."},
+    {id:"p5",cenaId:"c1",n:5,plato:"Quesos de cabra de Tandil con membrillo casero",extracto:"Zkittlez",tipo:"Bubble hash",micras:"73µ",temp:190,terps:"mirceno · linalol",nota:"Frutal. Contrapeso dulce antes del postre."},
+    {id:"p6",cenaId:"c1",n:6,plato:"Helado de dulce de leche quemado y aceite de oliva",extracto:"Papaya Cake",tipo:"Rosin cold cure",micras:"90µ",temp:185,terps:"limoneno · nerolidol",nota:"Cierra el círculo con el primer paso."}
+  ];
+  const M = [
+    {id:"m1",nombre:"Male Ferrari",ig:"@male.ferrari",tel:"11 5512 8834",restricciones:"Sin TACC",tolerancia:"Media",notas:"Vino a la 05 y a la 07. Le encanta el hachís tradicional."},
+    {id:"m2",nombre:"Tomás Iriarte",ig:"@tomi.iriarte",tel:"11 6033 2210",restricciones:"",tolerancia:"Alta",notas:"Siempre trae gente. Pregunta mucho por el proceso de extracción."},
+    {id:"m3",nombre:"Caro Benítez",ig:"@carobnz",tel:"11 4471 9902",restricciones:"Vegetariana",tolerancia:"Baja",notas:"Primera vez. Avisar bien las dosis antes de arrancar."},
+    {id:"m4",nombre:"Nacho Duarte",ig:"@nachoduarte",tel:"11 3390 7745",restricciones:"",tolerancia:"Alta",notas:"Nos presta el proyector. Cortesía."},
+    {id:"m5",nombre:"Flor Aguirre",ig:"@floraguirre",tel:"11 2288 6631",restricciones:"Alérgica a frutos secos",tolerancia:"Media",notas:"IMPORTANTE: revisar el paso de quesos, el membrillo iba con nueces."},
+    {id:"m6",nombre:"Seba Rossi",ig:"@sebarossi_",tel:"11 5567 1123",restricciones:"Sin lactosa",tolerancia:"Media",notas:""},
+    {id:"m7",nombre:"Juli Paz",ig:"@juli.paz",tel:"11 6712 4408",restricciones:"",tolerancia:"Baja",notas:"Amiga de Caro."},
+    {id:"m8",nombre:"Lucas Vidal",ig:"@lucasvidal.ok",tel:"11 3021 5590",restricciones:"",tolerancia:"Alta",notas:"Cultiva. Trajo su propio prensado la vez pasada."},
+    {id:"m9",nombre:"Dani Salgado",ig:"@dani.salg",tel:"11 5804 2276",restricciones:"Vegana",tolerancia:"Media",notas:"Hay que armarle los pasos 1, 3 y 5 aparte."},
+    {id:"m10",nombre:"Pili Ramos",ig:"@piliramos",tel:"11 4409 8812",restricciones:"",tolerancia:"Media",notas:""},
+    {id:"m11",nombre:"Fede Ocampo",ig:"@fedeocampo",tel:"11 2245 3367",restricciones:"",tolerancia:"Alta",notas:"Fotógrafo. Cubrió la 06 y la 07."},
+    {id:"m12",nombre:"Vicky León",ig:"@vickyleon",tel:"11 6690 1174",restricciones:"Sin TACC",tolerancia:"Baja",notas:""}
+  ];
+  const R = [
+    {id:"r1",cenaId:"c1",comensalId:"m1",asiento:1,estado:"pago",precio:98000,pagado:98000,metodo:"Transferencia",notas:""},
+    {id:"r2",cenaId:"c1",comensalId:"m2",asiento:2,estado:"pago",precio:98000,pagado:98000,metodo:"Transferencia",notas:""},
+    {id:"r3",cenaId:"c1",comensalId:"m5",asiento:3,estado:"sena",precio:98000,pagado:40000,metodo:"Transferencia",notas:"Paga el resto en la puerta."},
+    {id:"r4",cenaId:"c1",comensalId:"m3",asiento:4,estado:"sena",precio:98000,pagado:40000,metodo:"Mercado Pago",notas:"Primera vez."},
+    {id:"r5",cenaId:"c1",comensalId:"m7",asiento:5,estado:"sena",precio:98000,pagado:40000,metodo:"Mercado Pago",notas:""},
+    {id:"r6",cenaId:"c1",comensalId:"m8",asiento:6,estado:"pago",precio:98000,pagado:98000,metodo:"Efectivo",notas:""},
+    {id:"r7",cenaId:"c1",comensalId:"m4",asiento:7,estado:"pago",precio:0,pagado:0,metodo:"Cortesía",notas:"Cortesía: presta el equipo."},
+    {id:"r8",cenaId:"c1",comensalId:"m9",asiento:8,estado:"sena",precio:98000,pagado:40000,metodo:"Transferencia",notas:"Menú vegano completo."},
+    {id:"r9",cenaId:"c3",comensalId:"m1",asiento:1,estado:"vino",precio:92000,pagado:92000,metodo:"Transferencia",notas:""},
+    {id:"r10",cenaId:"c3",comensalId:"m2",asiento:2,estado:"vino",precio:92000,pagado:92000,metodo:"Efectivo",notas:""},
+    {id:"r11",cenaId:"c3",comensalId:"m11",asiento:3,estado:"vino",precio:0,pagado:0,metodo:"Cortesía",notas:"Cubrió la noche."},
+    {id:"r12",cenaId:"c3",comensalId:"m6",asiento:4,estado:"vino",precio:92000,pagado:92000,metodo:"Transferencia",notas:""},
+    {id:"r13",cenaId:"c3",comensalId:"m10",asiento:5,estado:"vino",precio:92000,pagado:92000,metodo:"Mercado Pago",notas:""},
+    {id:"r14",cenaId:"c3",comensalId:"m12",asiento:6,estado:"vino",precio:92000,pagado:92000,metodo:"Transferencia",notas:""},
+    {id:"r15",cenaId:"c3",comensalId:"m8",asiento:7,estado:"vino",precio:92000,pagado:92000,metodo:"Efectivo",notas:""},
+    {id:"r16",cenaId:"c3",comensalId:"m5",asiento:8,estado:"falto",precio:92000,pagado:38000,metodo:"Transferencia",notas:"Se enfermó. La seña queda a cuenta de la 08."},
+    {id:"r17",cenaId:"c3",comensalId:"m3",asiento:9,estado:"vino",precio:92000,pagado:92000,metodo:"Mercado Pago",notas:""},
+    {id:"r18",cenaId:"c3",comensalId:"m7",asiento:10,estado:"vino",precio:92000,pagado:92000,metodo:"Mercado Pago",notas:""}
+  ];
+  const V = [
+    {id:"v1",cenaId:"c3",tipo:"gasto",categoria:"Insumos",concepto:"Verdulería, carnicería y quesos",monto:214000,fecha:"2026-08-21"},
+    {id:"v2",cenaId:"c3",tipo:"gasto",categoria:"Extractos",concepto:"6 extractos para la cata (3g c/u)",monto:288000,fecha:"2026-08-19"},
+    {id:"v3",cenaId:"c3",tipo:"gasto",categoria:"Bebidas",concepto:"Vinos naturales y kombucha",monto:96000,fecha:"2026-08-21"},
+    {id:"v4",cenaId:"c3",tipo:"gasto",categoria:"Equipo humano",concepto:"Ayudante de cocina + bacha",monto:110000,fecha:"2026-08-22"},
+    {id:"v5",cenaId:"c3",tipo:"gasto",categoria:"Espacio",concepto:"Aporte al loft",monto:80000,fecha:"2026-08-22"},
+    {id:"v6",cenaId:"c3",tipo:"ingreso",categoria:"Merchandising",concepto:"3 remeras + 2 grinders",monto:78000,fecha:"2026-08-22"},
+    {id:"v7",cenaId:"c1",tipo:"gasto",categoria:"Extractos",concepto:"Seña a Solventless AR por los 6 extractos",monto:150000,fecha:"2026-09-08"},
+    {id:"v8",cenaId:"c1",tipo:"gasto",categoria:"Difusión",concepto:"Pauta en Instagram (7 días)",monto:35000,fecha:"2026-09-05"},
+    {id:"v9",cenaId:null,tipo:"gasto",categoria:"Equipamiento",concepto:"Prensa de rosin 4 t (usada) — cuota 1 de 3",monto:140000,fecha:"2026-09-02"}
+  ];
+  return {demo:true,cenas:C,pasos:P,comensales:M,reservas:R,movimientos:V,marca:Object.assign({},MARCA_DEF)};
+}
+
+/* ---------------------------------------------------------- almacenamiento */
+const LS = "stickyknife.mesa.v1";
+const COLS = ["cenas","reservas","pasos","comensales","movimientos"];
+let DB = null;          // namespace de la capability, o null
+let ASSETS = null;
+let DOWNLOADS = null;
+let dbSubs = [];
+let dbBooting = false;
+
+function guardarLocal(){
+  try{
+    localStorage.setItem(LS, JSON.stringify({
+      demo:state.demo, cenas:state.cenas, reservas:state.reservas, pasos:state.pasos,
+      comensales:state.comensales, movimientos:state.movimientos, marca:state.marca
+    }));
+  }catch(e){/* modo privado: seguimos en memoria */}
+}
+function leerLocal(){
+  try{
+    const raw = localStorage.getItem(LS);
+    if(!raw) return null;
+    const o = JSON.parse(raw);
+    if(!o || typeof o!=="object") return null;
+    COLS.forEach(c=>{ if(!Array.isArray(o[c])) o[c]=[]; });
+    o.marca = Object.assign({},MARCA_DEF,o.marca||{});
+    return o;
+  }catch(e){ return null; }
+}
+
+/** Escritura: memoria → pantalla → local → nube (si hay). */
+async function put(col,obj){
+  const arr = state[col];
+  const i = arr.findIndex(x=>x.id===obj.id);
+  if(i<0) arr.push(obj); else arr[i]=obj;
+  render(); guardarLocal();
+  if(DB){ try{ await DB.doc(col+"/"+obj.id).set(obj); }catch(e){ errDb(e); } }
+}
+async function quitar(col,id){
+  state[col] = state[col].filter(x=>x.id!==id);
+  render(); guardarLocal();
+  if(DB){ try{ await DB.doc(col+"/"+id).delete(); }catch(e){ errDb(e); } }
+}
+async function guardarMarca(){
+  aplicarMarca(); render(); guardarLocal();
+  if(DB){ try{ await DB.doc("config/marca").set(state.marca); }catch(e){ errDb(e); } }
+}
+function errDb(e){
+  const c = e && e.code;
+  if(c==="quota_exceeded") toast("La base está llena. Borrá cenas viejas para seguir cargando.");
+  else if(c==="resource_exhausted") toast("Demasiados cambios seguidos. Esperá unos segundos.");
+  else if(c==="revoked") { DB=null; sincroCartel(); toast("Se cortó el acceso a la nube. Seguís guardando en este dispositivo."); }
+  else if(c==="invalid_argument") toast("Ese dato no se pudo guardar en la nube.");
+  else toast("No se pudo guardar en la nube. Quedó guardado acá.");
+}
+
+function sincroCartel(){
+  const dot=$("#syncDot"), lbl=$("#syncLbl");
+  if(!dot) return;
+  dot.classList.toggle("live", !!DB);
+  lbl.textContent = DB ? "Sincronizado" : "Guardado local";
+  lbl.title = DB ? "Los cambios se ven en todos los dispositivos." : "Los datos viven en este navegador.";
+}
+
+async function conectarNube(){
+  if(dbBooting || !window.claude || !window.claude.use) return;
+  dbBooting = true;
+  let db=null;
+  try{ db = await window.claude.use("db"); }catch(e){ db=null; }
+  if(!db){ dbBooting=false; return; }
+  DB = db;
+  sincroCartel();
+
+  // Primera carga: si la nube está vacía y acá hay datos reales, los subimos.
+  try{
+    const cen = await DB.collection("cenas").limit(1).get();
+    const mar = await DB.doc("config/marca").get();
+    const nubeVacia = cen.empty && !mar.exists;
+    if(nubeVacia && !state.demo && (state.cenas.length||state.comensales.length)){
+      await subirTodo();
+    }
+  }catch(e){ /* seguimos con las suscripciones igual */ }
+
+  COLS.forEach(col=>{
+    const un = DB.collection(col).onSnapshot(snap=>{
+      // La nube manda: reemplazamos la colección entera.
+      state[col] = snap.docs.map(x=>Object.assign({id:x.id}, x.data()||{}));
+      if(state.demo && state[col].length){ state.demo=false; }
+      guardarLocal(); render();
+    }, e=>{ errDb(e); });
+    dbSubs.push(un);
+  });
+  dbSubs.push(DB.doc("config/marca").onSnapshot(s=>{
+    if(s.exists){ state.marca=Object.assign({},MARCA_DEF,s.data()); aplicarMarca(); render(); guardarLocal(); }
+  }, e=>errDb(e)));
+
+  try{ ASSETS = await window.claude.use("assets"); }catch(e){ ASSETS=null; }
+  try{ DOWNLOADS = await window.claude.use("downloads"); }catch(e){ DOWNLOADS=null; }
+  dbBooting=false;
+  render();
+}
+
+async function subirTodo(){
+  if(!DB) return;
+  for(const col of COLS){
+    for(const o of state[col]){
+      try{ await DB.doc(col+"/"+o.id).set(o); }catch(e){ errDb(e); return; }
+    }
+  }
+  try{ await DB.doc("config/marca").set(state.marca); }catch(e){}
+}
+
+async function vaciarTodo(){
+  if(DB){
+    for(const col of COLS){
+      for(const o of state[col].slice()){
+        try{ await DB.doc(col+"/"+o.id).delete(); }catch(e){}
+      }
+    }
+  }
+  COLS.forEach(c=>state[c]=[]);
+  state.demo=false;
+  guardarLocal(); render();
+}
+
+/* ---------------------------------------------------------- marca */
+function oscurecer(hex,f){
+  const m=/^#?([\da-f]{6})$/i.exec(String(hex||"").trim());
+  if(!m) return hex;
+  const n=parseInt(m[1],16);
+  const r=Math.round(((n>>16)&255)*f), g=Math.round(((n>>8)&255)*f), b=Math.round((n&255)*f);
+  return "#"+[r,g,b].map(v=>clamp(v,0,255).toString(16).padStart(2,"0")).join("");
+}
+function aplicarMarca(){
+  const M=state.marca, R=document.documentElement.style;
+  M.acentoClaro  = oscurecer(M.acento,.80);
+  M.segundoClaro = oscurecer(M.segundo,.72);
+  R.setProperty("--brand-accent",M.acento);
+  R.setProperty("--brand-accent-lt",M.acentoClaro);
+  R.setProperty("--brand-second",M.segundo);
+  R.setProperty("--brand-second-lt",M.segundoClaro);
+  const rn=$("#railName"); if(rn) rn.textContent = M.nombre||"Sticky Knife";
+  const marca = M.logoUrl ? '<img src="'+esc(M.logoUrl)+'" alt="">' : I.cuchillo;
+  const rl=$("#railLogo"); if(rl) rl.innerHTML = marca;
+  const lp=$(".logo-prev"); if(lp) lp.innerHTML = marca;
+  document.title = (M.nombre||"Sticky Knife")+" Mesa";
+}
+
+/* ---------------------------------------------------------- selectores */
+const porId=(col,id)=> state[col].find(x=>x.id===id) || null;
+const cena =id=> porId("cenas",id);
+const comensal=id=> porId("comensales",id);
+const reservasDe=id=> state.reservas.filter(r=>r.cenaId===id).sort((a,b)=>(a.asiento||0)-(b.asiento||0));
+const pasosDe  =id=> state.pasos.filter(p=>p.cenaId===id).sort((a,b)=>(a.n||0)-(b.n||0));
+const movsDe   =id=> state.movimientos.filter(m=>m.cenaId===id);
+
+function cuentasCena(c){
+  if(!c) return {cobrado:0,porCobrar:0,otros:0,gastos:0,margen:0,ocupados:0,libres:0,vinieron:0};
+  const R=reservasDe(c.id), Mv=movsDe(c.id);
+  const cobrado  = sum(R,r=>r.pagado);
+  const porCobrar= sum(R.filter(r=>r.estado!=="falto"), r=>Math.max(0,(Number(r.precio)||0)-(Number(r.pagado)||0)));
+  const otros    = sum(Mv.filter(m=>m.tipo==="ingreso"), m=>m.monto);
+  const gastos   = sum(Mv.filter(m=>m.tipo==="gasto"), m=>m.monto);
+  const ocupados = R.length;
+  return {
+    cobrado, porCobrar, otros, gastos,
+    margen: cobrado+otros-gastos,
+    ocupados, libres:Math.max(0,(c.cupos||0)-ocupados),
+    vinieron:R.filter(r=>r.estado==="vino").length,
+    faltaron:R.filter(r=>r.estado==="falto").length
+  };
+}
+function historialComensal(id){
+  const R=state.reservas.filter(r=>r.comensalId===id);
+  const cs=R.map(r=>cena(r.cenaId)).filter(Boolean);
+  return {
+    veces:R.length,
+    vinieron:R.filter(r=>r.estado==="vino").length,
+    faltaron:R.filter(r=>r.estado==="falto").length,
+    gastado:sum(R,r=>r.pagado),
+    debe:sum(R.filter(r=>r.estado!=="falto"),r=>Math.max(0,(Number(r.precio)||0)-(Number(r.pagado)||0))),
+    ultima:cs.sort((a,b)=>d(b.fecha)-d(a.fecha))[0]||null,
+    reservas:R
+  };
+}
+function proximaCena(){
+  const h=hoyISO();
+  return state.cenas.filter(c=>c.fecha>=h && c.estado!=="cerrada")
+                    .sort((a,b)=>a.fecha.localeCompare(b.fecha))[0]||null;
+}
+function cenasOrdenadas(){
+  return state.cenas.slice().sort((a,b)=>b.fecha.localeCompare(a.fecha));
+}
+/** Totales de un mes. Los cupos cobrados se imputan a la fecha de su cena. */
+function cuentasMes(mes){
+  const cs = state.cenas.filter(c=>mesDe(c.fecha)===mes);
+  const ids = cs.map(c=>c.id);
+  const R = state.reservas.filter(r=>ids.indexOf(r.cenaId)>=0);
+  const Mv = state.movimientos.filter(m=>mesDe(m.fecha)===mes);
+  const cupos = sum(R,r=>r.pagado);
+  const otros = sum(Mv.filter(m=>m.tipo==="ingreso"),m=>m.monto);
+  const gastos= sum(Mv.filter(m=>m.tipo==="gasto"),m=>m.monto);
+  const porCobrar = sum(R.filter(r=>r.estado!=="falto"),r=>Math.max(0,(Number(r.precio)||0)-(Number(r.pagado)||0)));
+  return {cenas:cs,cupos,otros,gastos,ingresos:cupos+otros,margen:cupos+otros-gastos,porCobrar,comensales:R.length,movs:Mv};
+}
+function mesesConDatos(){
+  const s=new Set([mesDe(hoyISO())]);
+  state.cenas.forEach(c=>s.add(mesDe(c.fecha)));
+  state.movimientos.forEach(m=>s.add(mesDe(m.fecha)));
+  return Array.from(s).filter(Boolean).sort().reverse();
+}
+function saldosPendientes(){
+  const out=[];
+  state.cenas.forEach(c=>{
+    reservasDe(c.id).forEach(r=>{
+      const saldo=Math.max(0,(Number(r.precio)||0)-(Number(r.pagado)||0));
+      if(saldo>0 && r.estado!=="falto") out.push({cena:c,reserva:r,comensal:comensal(r.comensalId),saldo});
+    });
+  });
+  return out.sort((a,b)=>a.cena.fecha.localeCompare(b.cena.fecha));
+}
+
+/* ============================================================ RENDER */
+function render(){
+  const act = document.activeElement;
+  const keepId = act && act.id && $("#view").contains(act) ? act.id : null;
+  const keepSel = keepId && act.selectionStart!=null ? [act.selectionStart,act.selectionEnd] : null;
+
+  $$(".navbtn[data-go]").forEach(b=> b.setAttribute("aria-current", String(b.dataset.go===ui.scr)));
+  $("#tagCenas").textContent = state.cenas.filter(c=>c.fecha>=hoyISO()).length || state.cenas.length;
+  $("#tagComensales").textContent = state.comensales.length;
+  $("#backBtn").hidden = !(ui.scr==="cena"||ui.scr==="comensal");
+
+  const V=$("#view");
+  if(ui.scr==="cena" && !cena(ui.cenaId)) ui.scr="cenas";
+  if(ui.scr==="comensal" && !comensal(ui.comensalId)) ui.scr="comensales";
+
+  const R = {inicio:scrInicio,cenas:scrCenas,cena:scrCena,comensales:scrComensales,comensal:scrComensal,numeros:scrNumeros,marca:scrMarca}[ui.scr] || scrInicio;
+  const out = R();
+  $("#scrTitle").textContent = out.titulo;
+  $("#scrSub").innerHTML = out.sub||"";
+  $("#scrActions").innerHTML = out.acciones||"";
+  V.innerHTML = (state.demo ? bannerDemo() : "") + out.html;
+  sincroCartel();
+
+  if(keepId){ const el=$("#"+keepId); if(el && el.focus){ el.focus(); if(keepSel&&el.setSelectionRange){ try{el.setSelectionRange(keepSel[0],keepSel[1]);}catch(e){} } } }
+}
+
+function bannerDemo(){
+  return '<div class="banner"><svg class="ic" style="width:17px;height:17px;flex:0 0 17px;color:var(--resin)" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 11v5"/><path d="M12 8v.1"/></svg>'
+    + '<span class="grow"><b>Datos de ejemplo.</b> Todo lo que ves es inventado para que pruebes la app. Podés tocar, editar y romper lo que quieras.</span>'
+    + '<button class="btn sm" data-act="vaciar">Empezar de cero</button></div>';
+}
+
+/* --------------------------------------------------- componentes */
+function tile(lab,val,foot,cls,chico){
+  return '<div class="tile '+(cls||"")+'"><span class="lab">'+esc(lab)+'</span>'
+    + '<span class="val">'+(chico?'<small>'+esc(chico)+'</small> ':'')+esc(val)+'</span>'
+    + (foot?'<span class="foot">'+foot+'</span>':'')+'</div>';
+}
+function pill(estado){
+  const e=ESTADOS[estado]||ESTADOS.libre;
+  return '<span class="pill '+e.cls+'"><span class="bullet"></span>'+e.lbl+'</span>';
+}
+function vacio(txt,btn){
+  return '<div class="empty">'+I.plato+'<p>'+esc(txt)+'</p>'+(btn||"")+'</div>';
+}
+function estadoCena(c){
+  const m={borrador:["neutral","Borrador"],abierta:["vino","Abierta"],cerrada:["libre","Cerrada"]};
+  const [cls,lbl]=m[c.estado]||m.borrador;
+  return '<span class="pill '+cls+'">'+lbl+'</span>';
+}
+
+/* --------------------------------------------------- LA MESA */
+function mesaHTML(c,sel){
+  const R=reservasDe(c.id), N=Math.max(1,Number(c.cupos)||1);
+  const byAsiento={}; R.forEach(r=>{ byAsiento[r.asiento]=r; });
+  const compacto = N>16 || window.innerWidth<620;
+
+  let asientos="";
+  for(let i=1;i<=N;i++){
+    const r=byAsiento[i], m=r?comensal(r.comensalId):null;
+    const est=r?r.estado:"libre";
+    const nom=m?m.nombre:"Libre";
+    const ini=m?iniciales(m.nombre):"+";
+    let pos="";
+    if(!compacto){
+      const a=-Math.PI/2 + (i-1)*2*Math.PI/N;
+      pos=' style="left:'+(50+Math.cos(a)*40).toFixed(2)+'%;top:'+(50+Math.sin(a)*40).toFixed(2)+'%"';
+    }
+    asientos += '<button class="seat '+est+(sel===i?" sel":"")+'"'+pos+' data-act="asiento" data-n="'+i+'" '
+      + 'title="'+esc("Cupo "+i+" · "+nom)+'" aria-label="'+esc("Cupo "+i+", "+nom)+'">'
+      + '<span class="disc">'+esc(ini)+'</span>'
+      + '<span class="nm">'+esc(m?m.nombre.split(" ")[0]:"libre")+'</span>'
+      + '<span class="idx">'+i+'</span></button>';
+  }
+
+  const q=cuentasCena(c);
+  const centro = '<div class="mesa-top"><div class="t1">'+q.ocupados+'<span style="color:var(--ink-3)">/'+N+'</span></div>'
+    + '<div class="t2">cupos tomados</div>'
+    + '<div class="t3">'+money(q.cobrado,{corto:1})+' cobrado'+(q.porCobrar>0?' · <span style="color:var(--warn)">'+money(q.porCobrar,{corto:1})+' por cobrar</span>':'')+'</div></div>';
+
+  const cuerpo = compacto
+    ? '<div class="banquete">'+asientos+'</div>'
+      + '<div style="text-align:center;padding:14px 0 2px">'+centro.replace(/class="mesa-top"/,'class="mesa-top" style="position:static;transform:none;width:auto"')+'</div>'
+    : '<div class="mesa"><svg viewBox="0 0 680 400" aria-hidden="true">'
+      + '<ellipse cx="340" cy="200" rx="198" ry="106" style="fill:var(--surface-2);stroke:var(--line);stroke-width:1.5"/>'
+      + '<ellipse cx="340" cy="200" rx="186" ry="95" style="fill:none;stroke:var(--line-soft);stroke-width:1"/>'
+      + '</svg>'+asientos+centro+'</div>';
+
+  return '<div class="mesa-wrap">'+cuerpo
+    + '<div class="mesa-leyenda">'
+    + '<span class="lg"><i></i>Libre</span><span class="lg sena"><i></i>Señó</span>'
+    + '<span class="lg pago"><i></i>Pagó todo</span><span class="lg vino"><i></i>Vino</span>'
+    + '<span class="lg falto"><i></i>No vino</span></div></div>';
+}
+
+/* --------------------------------------------------- pantalla: HOY */
+function scrInicio(){
+  const c=proximaCena();
+  const mes=cuentasMes(mesDe(hoyISO()));
+  const saldos=saldosPendientes();
+  let html="";
+
+  if(c){
+    const q=cuentasCena(c), dias=diasHasta(c.fecha);
+    const cuando = dias===0?"Es hoy":dias===1?"Es mañana":dias<0?"Fue hace "+(-dias)+" días":"Faltan "+dias+" días";
+    html += '<div class="card" style="margin-bottom:14px;overflow:hidden">'
+      + '<div class="card-h"><div class="grow"><span class="eyebrow">Próxima cena · '+esc(cuando)+'</span>'
+      + '<h3 style="margin-top:5px;font-size:23px">'+esc(c.nombre)+'</h3>'
+      + '<div style="font-size:13px;color:var(--ink-2);margin-top:4px" class="mono">'+esc(fechaLarga(c.fecha))+' · '+esc(c.hora||"")+' · '+esc(c.lugar||"Sin lugar")+'</div></div>'
+      + '<button class="btn pri" data-act="abrir-cena" data-id="'+c.id+'">Abrir</button></div>'
+      + '<div class="card-b">'+mesaHTML(c,null)+'</div></div>';
+  }else{
+    html += '<div class="card" style="margin-bottom:14px">'+vacio("No hay ninguna cena próxima armada. Cuando definas fecha y cupos, la mesa aparece acá.",
+      '<button class="btn pri" data-act="nueva-cena">'+I.mas+'Armar una cena</button>')+'</div>';
+  }
+
+  /* alertas de servicio: lo que hay que mirar antes de la noche */
+  const avisos=[];
+  if(c){
+    const R=reservasDe(c.id);
+    R.forEach(r=>{
+      const m=comensal(r.comensalId);
+      if(m && m.restricciones) avisos.push({t:"a",tx:"<b>"+esc(m.nombre)+"</b> — "+esc(m.restricciones)+" <span style='color:var(--ink-3)'>· cupo "+r.asiento+"</span>"});
+    });
+    R.forEach(r=>{
+      const m=comensal(r.comensalId);
+      if(m && m.tolerancia==="Baja") avisos.push({t:"i",tx:"<b>"+esc(m.nombre)+"</b> — tolerancia baja, arrancar con dosis chicas <span style='color:var(--ink-3)'>· cupo "+r.asiento+"</span>"});
+    });
+    const q=cuentasCena(c);
+    if(q.libres>0) avisos.push({t:"w",tx:"Quedan <b>"+q.libres+" cupos libres</b> para "+esc(c.nombre)+"."});
+    if(pasosDe(c.id).length===0) avisos.push({t:"w",tx:"Todavía no cargaste los pasos de esta cena."});
+  }
+  saldos.slice(0,6).forEach(s=>{
+    avisos.push({t:"w",tx:"<b>"+esc(s.comensal?s.comensal.nombre:"—")+"</b> debe <b class='mono'>"+money(s.saldo)+"</b> de "+esc(s.cena.nombre)+"."});
+  });
+
+  html += '<div class="grid g-2" style="align-items:start">';
+  html += '<div class="card"><div class="card-h"><h3>Para mirar</h3><span class="pill neutral" style="margin-left:auto">'+avisos.length+'</span></div>'
+    + (avisos.length ? '<div>'+avisos.map(a=>{
+        const ic = a.t==="a"?I.alerta : a.t==="w"?I.reloj : I.info;
+        return '<div class="alertline '+a.t+'">'+ic.replace("<svg",'<svg class="ic"')+'<span>'+a.tx+'</span></div>';
+      }).join("")+'</div>'
+      : vacio("Todo en orden. Ninguna restricción, ningún saldo pendiente."))
+    + '</div>';
+
+  html += '<div class="stack">'
+    + '<div class="grid g-stats">'
+    + tile("Ingresos del mes", money(mes.ingresos,{corto:1}), esc(fechaMes(hoyISO()+"")), "in")
+    + tile("Gastos del mes", money(mes.gastos,{corto:1}), mes.movs.filter(m=>m.tipo==="gasto").length+" movimientos", "out")
+    + '</div>'
+    + '<div class="grid g-stats">'
+    + tile("Margen del mes", money(mes.margen,{corto:1}), mes.cenas.length+(mes.cenas.length===1?" cena":" cenas"), mes.margen>=0?"pos":"neg")
+    + tile("Por cobrar", money(mes.porCobrar,{corto:1}), saldos.length+(saldos.length===1?" persona":" personas"), mes.porCobrar>0?"neg":"")
+    + '</div>'
+    + '<div class="card"><div class="card-h"><h3>Últimos movimientos</h3>'
+    + '<button class="btn sm" data-act="ver-numeros" style="margin-left:auto">Ver todo</button></div>'
+    + listaMovs(state.movimientos.slice().sort((a,b)=>b.fecha.localeCompare(a.fecha)).slice(0,5))
+    + '</div></div>';
+  html += '</div>';
+
+  return {titulo:"Hoy", sub:esc(fechaLarga(hoyISO())),
+    acciones:'<button class="btn pri" data-act="nueva-cena">'+I.mas+'Nueva cena</button>', html:html};
+}
+
+function listaMovs(arr){
+  if(!arr.length) return vacio("Todavía no cargaste gastos ni otros ingresos.");
+  return '<div class="list">'+arr.map(m=>{
+    const c=m.cenaId?cena(m.cenaId):null;
+    return '<button class="item" data-act="editar-mov" data-id="'+m.id+'">'
+      + '<span class="stripe '+(m.tipo==="ingreso"?"in":"out")+'"></span>'
+      + '<span class="grow"><span class="ttl">'+esc(m.concepto||m.categoria)+'</span>'
+      + '<span class="sub"><span>'+esc(m.categoria)+'</span><span class="mono">'+esc(fechaCorta(m.fecha))+'</span>'
+      + (c?'<span style="color:var(--ink-3)">'+esc(c.nombre)+'</span>':'<span style="color:var(--ink-3)">General</span>')+'</span></span>'
+      + '<span class="amt" style="color:var(--chart-'+(m.tipo==="ingreso"?"in":"out")+')">'+(m.tipo==="ingreso"?"+":"−")+money(m.monto).replace(/^-/,"")+'</span>'
+      + '</button>';
+  }).join("")+'</div>';
+}
+
+/* --------------------------------------------------- pantalla: CENAS */
+function scrCenas(){
+  const h=hoyISO();
+  let cs=cenasOrdenadas();
+  if(ui.filtroCenas==="proximas") cs=cs.filter(c=>c.fecha>=h).reverse();
+  else if(ui.filtroCenas==="pasadas") cs=cs.filter(c=>c.fecha<h);
+
+  const seg='<div class="seg" style="margin-bottom:14px">'
+    + ['proximas','pasadas','todas'].map(k=>'<button data-act="filtro-cenas" data-k="'+k+'" aria-pressed="'+(ui.filtroCenas===k)+'">'+({proximas:"Próximas",pasadas:"Pasadas",todas:"Todas"})[k]+'</button>').join("")
+    + '</div>';
+
+  if(!cs.length) return {titulo:"Cenas",sub:"",acciones:'<button class="btn pri" data-act="nueva-cena">'+I.mas+'Nueva cena</button>',
+    html:seg+'<div class="card">'+vacio("No hay cenas en esta vista.",'<button class="btn pri" data-act="nueva-cena">'+I.mas+'Armar una cena</button>')+'</div>'};
+
+  const html = seg+'<div class="grid g-cards">'+cs.map(c=>{
+    const q=cuentasCena(c), dias=diasHasta(c.fecha);
+    const pct=Math.round(100*q.ocupados/Math.max(1,c.cupos||1));
+    return '<button class="card" data-act="abrir-cena" data-id="'+c.id+'" style="text-align:left;padding:0;cursor:pointer">'
+      + '<div class="card-b" style="display:flex;flex-direction:column;gap:11px">'
+      + '<div class="row" style="gap:8px">'+estadoCena(c)
+      + '<span class="mono" style="font-size:12px;color:var(--ink-3);margin-left:auto">'+esc(fechaCorta(c.fecha))+' · '+esc(c.hora||"")+'</span></div>'
+      + '<div><div style="font-family:var(--f-display);font-weight:700;font-size:21px;letter-spacing:.02em;line-height:1.05;text-transform:uppercase">'+esc(c.nombre)+'</div>'
+      + '<div style="font-size:12.5px;color:var(--ink-2);margin-top:4px">'+esc(c.lugar||"Sin lugar definido")+(c.fecha>=h?' · '+(dias===0?"hoy":dias===1?"mañana":"en "+dias+" días"):"")+'</div></div>'
+      + '<div><div style="display:flex;justify-content:space-between;font-size:12px;color:var(--ink-2);margin-bottom:4px">'
+      + '<span><b style="color:var(--ink);font-family:var(--f-mono)">'+q.ocupados+'/'+(c.cupos||0)+'</b> cupos</span>'
+      + '<span class="mono">'+money(c.precio,{corto:1})+' c/u</span></div>'
+      + '<div style="height:6px;background:var(--surface-3);border-radius:3px;overflow:hidden"><div style="height:100%;width:'+pct+'%;background:var(--ember);border-radius:3px"></div></div></div>'
+      + '<div style="display:flex;gap:14px;padding-top:9px;border-top:1px solid var(--line-soft);font-size:12px">'
+      + '<span style="color:var(--ink-3)">Cobrado <b class="mono" style="color:var(--chart-in);display:block;font-size:13.5px;margin-top:1px">'+money(q.cobrado,{corto:1})+'</b></span>'
+      + '<span style="color:var(--ink-3)">Gastos <b class="mono" style="color:var(--chart-out);display:block;font-size:13.5px;margin-top:1px">'+money(q.gastos,{corto:1})+'</b></span>'
+      + '<span style="color:var(--ink-3);margin-left:auto;text-align:right">Margen <b class="mono" style="color:var('+(q.margen>=0?"--ok":"--alert")+');display:block;font-size:13.5px;margin-top:1px">'+money(q.margen,{corto:1})+'</b></span>'
+      + '</div></div></button>';
+  }).join("")+'</div>';
+
+  return {titulo:"Cenas", sub:state.cenas.length+" en total",
+    acciones:'<button class="btn pri" data-act="nueva-cena">'+I.mas+'Nueva cena</button>', html:html};
+}
+
+/* --------------------------------------------------- pantalla: UNA CENA */
+function scrCena(){
+  const c=cena(ui.cenaId), q=cuentasCena(c);
+  const tabs=['mesa','pasos','cuentas'];
+  const seg='<div class="seg" style="margin-bottom:16px">'
+    + tabs.map(k=>'<button data-act="tab-cena" data-k="'+k+'" aria-pressed="'+(ui.tabCena===k)+'">'
+      + ({mesa:"La mesa",pasos:"Pasos",cuentas:"Cuentas"})[k]+'</button>').join("")+'</div>';
+
+  let cuerpo="";
+  if(ui.tabCena==="mesa") cuerpo=tabMesa(c,q);
+  else if(ui.tabCena==="pasos") cuerpo=tabPasos(c);
+  else cuerpo=tabCuentas(c,q);
+
+  return {
+    titulo:c.nombre,
+    sub:'<span class="mono">'+esc(fechaLarga(c.fecha))+' · '+esc(c.hora||"")+'</span> · '+esc(c.lugar||"sin lugar"),
+    acciones:'<button class="btn" data-act="editar-cena" data-id="'+c.id+'">'+I.lapiz+'Editar</button>',
+    html:seg+cuerpo
+  };
+}
+
+function tabMesa(c,q){
+  const R=reservasDe(c.id);
+  let html='<div class="card" style="margin-bottom:14px"><div class="card-b">'+mesaHTML(c,null)+'</div></div>';
+
+  html += '<div class="grid g-stats" style="margin-bottom:14px">'
+    + tile("Cupos","<span class='mono'>"+q.ocupados+"/"+(c.cupos||0)+"</span>", q.libres>0?q.libres+" libres":"Mesa completa", q.libres>0?"":"accent")
+    + tile("Cobrado", money(q.cobrado,{corto:1}), R.filter(r=>r.estado==="pago"||r.estado==="vino").length+" pagaron todo","in")
+    + tile("Por cobrar", money(q.porCobrar,{corto:1}), R.filter(r=>r.estado==="sena").length+" con seña", q.porCobrar>0?"neg":"")
+    + tile("Margen", money(q.margen,{corto:1}), money(q.gastos,{corto:1})+" de gastos", q.margen>=0?"pos":"neg")
+    + '</div>';
+
+  html += '<div class="card"><div class="card-h"><h3>Quién es cada cupo</h3>'
+    + '<button class="btn sm" data-act="exportar-cena" data-id="'+c.id+'" style="margin-left:auto">'+I.copia+'Exportar</button>'
+    + '<button class="btn sm pri" data-act="asiento" data-n="0">'+I.mas+'Sumar</button></div>';
+
+  if(!R.length){
+    html += vacio("La mesa está vacía. Tocá un asiento del dibujo o el botón Sumar para poner a alguien.");
+  }else{
+    html += '<div class="list">'+R.map(r=>{
+      const m=comensal(r.comensalId);
+      const saldo=Math.max(0,(Number(r.precio)||0)-(Number(r.pagado)||0));
+      return '<button class="item" data-act="asiento" data-n="'+r.asiento+'">'
+        + '<span class="avatar '+(r.estado==="vino"?"on":"")+'">'+esc(m?iniciales(m.nombre):"?")+'</span>'
+        + '<span class="grow"><span class="ttl">'+esc(m?m.nombre:"Sin asignar")+'</span>'
+        + '<span class="sub"><span class="mono">cupo '+r.asiento+'</span>'
+        + (m&&m.ig?'<span>'+esc(m.ig)+'</span>':'')
+        + (m&&m.restricciones?'<span style="color:var(--alert)">'+esc(m.restricciones)+'</span>':'')
+        + (m&&m.tolerancia?'<span style="color:var(--ink-3)">tol. '+esc(m.tolerancia)+'</span>':'')
+        + '</span></span>'
+        + '<span style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">'
+        + pill(r.estado)
+        + '<span class="amt" style="font-size:12.5px;color:var('+(saldo>0?"--warn":"--ink-3")+')">'
+        + (saldo>0? "debe "+money(saldo) : money(r.pagado))+'</span></span>'
+        + '</button>';
+    }).join("")+'</div>';
+  }
+  html += '</div>';
+
+  if(c.notas){
+    html += '<div class="card" style="margin-top:14px"><div class="card-h"><h3>Notas de la noche</h3></div>'
+      + '<div class="card-b" style="font-size:14px;color:var(--ink-2);white-space:pre-wrap">'+esc(c.notas)+'</div></div>';
+  }
+  return html;
+}
+
+function tabPasos(c){
+  const P=pasosDe(c.id);
+  let html='<div class="card"><div class="card-h"><h3>Pasos de la noche</h3>'
+    + '<span class="pill neutral">'+P.length+'</span>'
+    + '<button class="btn sm pri" data-act="nuevo-paso" style="margin-left:auto">'+I.mas+'Sumar paso</button></div>';
+  if(!P.length){
+    html += vacio("Todavía no armaste el menú. Cada paso lleva un plato y el extracto con el que se marida.");
+  }else{
+    html += '<div>'+P.map(p=>
+      '<div class="paso"><div class="n">'+String(p.n).padStart(2,"0")+'</div>'
+      + '<div><div class="plato">'+esc(p.plato)+'</div>'
+      + '<div class="maridaje"><span class="ex">'+esc(p.extracto||"Sin extracto")+'</span>'
+      + '<span class="meta">'
+      + (p.tipo?'<span>'+esc(p.tipo)+'</span>':'')
+      + (p.micras&&p.micras!=="—"?'<span>'+esc(p.micras)+'</span>':'')
+      + (p.temp?'<span title="Temperatura de dabeo">'+esc(p.temp)+'&nbsp;°C</span>':'')
+      + (p.terps?'<span>'+esc(p.terps)+'</span>':'')
+      + '</span></div>'
+      + (p.nota?'<div class="nota">'+esc(p.nota)+'</div>':'')
+      + '<div class="acts"><button class="btn sm ghost" data-act="editar-paso" data-id="'+p.id+'">'+I.lapiz+'Editar</button>'
+      + '<button class="btn sm danger" data-act="borrar-paso" data-id="'+p.id+'">'+I.tacho+'</button></div>'
+      + '</div></div>').join("")+'</div>';
+  }
+  html+='</div>';
+
+  if(P.length){
+    const temps=P.filter(p=>p.temp).map(p=>Number(p.temp));
+    html += '<div class="card" style="margin-top:14px"><div class="card-h"><h3>Recorrido de la cata</h3></div>'
+      + '<div class="card-b"><div style="display:flex;gap:2px;align-items:flex-end;height:76px">'
+      + P.map(p=>{
+          const t=Number(p.temp)||0;
+          const lo=170, hi=230;
+          const h=t? clamp(Math.round(100*(t-lo)/(hi-lo)),8,100):8;
+          return '<div style="flex:1 1 0;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:4px" '
+            + 'data-tip="'+esc(p.extracto+" · "+(p.tipo||""))+'" data-tip2="'+esc((p.temp||"?")+" °C")+'">'
+            + '<span class="mono" style="font-size:10px;color:var(--ink-3)">'+(p.temp||"?")+'</span>'
+            + '<div style="width:100%;max-width:52px;height:'+h+'%;background:var(--resin);border-radius:3px 3px 0 0;opacity:'+(0.45+0.55*h/100).toFixed(2)+'"></div></div>';
+        }).join("")
+      + '</div><div style="display:flex;gap:2px;margin-top:6px">'
+      + P.map(p=>'<div style="flex:1 1 0;text-align:center;font-family:var(--f-mono);font-size:10px;color:var(--ink-3)">'+p.n+'</div>').join("")
+      + '</div>'
+      + '<p style="font-size:12.5px;color:var(--ink-2);margin-top:12px">Temperatura de dabeo de cada paso, en °C. '
+      + (temps.length?'Arrancás en '+Math.min.apply(null,temps)+'° y cerrás en '+P[P.length-1].temp+'°.':'')
+      + ' Lo bajo saca terpenos, lo alto saca cuerpo.</p></div></div>';
+  }
+  return html;
+}
+
+function tabCuentas(c,q){
+  const Mv=movsDe(c.id).sort((a,b)=>b.fecha.localeCompare(a.fecha));
+  const R=reservasDe(c.id);
+  const totalIn=q.cobrado+q.otros;
+  const maxV=Math.max(totalIn,q.gastos,1);
+
+  let html='<div class="grid g-stats" style="margin-bottom:14px">'
+    + tile("Entró", money(totalIn,{corto:1}), money(q.cobrado,{corto:1})+" de cupos"+(q.otros?" + "+money(q.otros,{corto:1})+" otros":""), "in")
+    + tile("Salió", money(q.gastos,{corto:1}), Mv.filter(m=>m.tipo==="gasto").length+" gastos", "out")
+    + tile("Margen", money(q.margen,{corto:1}), totalIn>0?Math.round(100*q.margen/totalIn)+"% de lo que entró":"—", q.margen>=0?"pos":"neg")
+    + tile("Por cupo", money(q.ocupados?q.margen/q.ocupados:0,{corto:1}), "sobre "+q.ocupados+" comensales", "")
+    + '</div>';
+
+  html += '<div class="card" style="margin-bottom:14px"><div class="card-h"><h3>Entró vs. salió</h3></div><div class="card-b">'
+    + '<div class="legend"><span class="li"><span class="sw in"></span>Entró</span><span class="li"><span class="sw out"></span>Salió</span></div>'
+    + '<div class="baseline">'
+    + '<div class="bar in solo" style="width:'+(100*totalIn/maxV).toFixed(1)+'%" data-tip="Entró" data-tip2="'+esc(money(totalIn))+'"></div>'
+    + '<div style="height:5px"></div>'
+    + '<div class="bar out solo" style="width:'+(100*q.gastos/maxV).toFixed(1)+'%" data-tip="Salió" data-tip2="'+esc(money(q.gastos))+'"></div>'
+    + '</div><div class="scaleline"><span>0</span><span>'+esc(money(maxV,{corto:1}))+'</span></div>'
+    + '<p style="font-size:12.5px;color:var(--ink-2);margin-top:12px">Los cupos cobrados se suman solos desde la mesa. Acá cargás los gastos y cualquier otro ingreso de la noche.</p>'
+    + '</div></div>';
+
+  html += '<div class="card"><div class="card-h"><h3>Movimientos de esta cena</h3>'
+    + '<button class="btn sm pri" data-act="nuevo-mov" data-cena="'+c.id+'" style="margin-left:auto">'+I.mas+'Cargar</button></div>'
+    + listaMovs(Mv)+'</div>';
+
+  if(R.length){
+    html += '<div class="card" style="margin-top:14px"><div class="card-h"><h3>Cobranza cupo por cupo</h3></div><div class="list">'
+      + R.map(r=>{
+        const m=comensal(r.comensalId);
+        const saldo=Math.max(0,(Number(r.precio)||0)-(Number(r.pagado)||0));
+        const pct=r.precio>0?clamp(Math.round(100*(r.pagado||0)/r.precio),0,100):100;
+        return '<button class="item" data-act="asiento" data-n="'+r.asiento+'">'
+          + '<span class="avatar">'+esc(m?iniciales(m.nombre):"?")+'</span>'
+          + '<span class="grow"><span class="ttl">'+esc(m?m.nombre:"—")+'</span>'
+          + '<span class="sub" style="gap:6px"><span class="mono">'+money(r.pagado)+' / '+money(r.precio)+'</span>'
+          + (r.metodo?'<span style="color:var(--ink-3)">'+esc(r.metodo)+'</span>':'')+'</span>'
+          + '<span style="display:block;height:5px;background:var(--surface-3);border-radius:3px;margin-top:6px;max-width:200px;overflow:hidden">'
+          + '<span style="display:block;height:100%;width:'+pct+'%;background:var('+(saldo>0?"--warn":"--ok")+');border-radius:3px"></span></span></span>'
+          + '<span class="amt" style="color:var('+(saldo>0?"--warn":"--ok")+')">'+(saldo>0?money(saldo):"al día")+'</span>'
+          + '</button>';
+      }).join("")+'</div></div>';
+  }
+  return html;
+}
+
+/* --------------------------------------------------- pantalla: COMENSALES */
+function scrComensales(){
+  const q=(ui.qc||"").toLowerCase().trim();
+  let M=state.comensales.slice();
+  if(q) M=M.filter(m=>((m.nombre||"")+" "+(m.ig||"")+" "+(m.tel||"")+" "+(m.notas||"")+" "+(m.restricciones||"")).toLowerCase().indexOf(q)>=0);
+  M.sort((a,b)=>(a.nombre||"").localeCompare(b.nombre||"","es"));
+
+  const buscador='<div class="row" style="margin-bottom:14px">'
+    + '<div class="searchbox">'+I.lupa+'<input class="inp" id="qComensales" type="search" placeholder="Buscar por nombre, IG, teléfono o nota…" value="'+esc(ui.qc)+'"></div>'
+    + '<button class="btn sm" data-act="exportar-comensales">'+I.copia+'Exportar</button></div>';
+
+  if(!M.length) return {titulo:"Comensales",sub:state.comensales.length+" en la libreta",
+    acciones:'<button class="btn pri" data-act="nuevo-comensal">'+I.mas+'Sumar</button>',
+    html:buscador+'<div class="card">'+vacio(q?"Nadie coincide con esa búsqueda.":"La libreta está vacía. Cada persona que reserva queda guardada acá con sus restricciones y su historial.",
+      q?"":'<button class="btn pri" data-act="nuevo-comensal">'+I.mas+'Sumar a alguien</button>')+'</div>'};
+
+  const html=buscador+'<div class="card"><div class="list">'+M.map(m=>{
+    const h=historialComensal(m.id);
+    return '<button class="item" data-act="abrir-comensal" data-id="'+m.id+'">'
+      + '<span class="avatar '+(h.veces>1?"on":"")+'">'+esc(iniciales(m.nombre))+'</span>'
+      + '<span class="grow"><span class="ttl">'+esc(m.nombre)+'</span>'
+      + '<span class="sub">'
+      + (m.ig?'<span>'+esc(m.ig)+'</span>':'')
+      + '<span style="color:var(--ink-3)">'+h.veces+(h.veces===1?" cena":" cenas")+'</span>'
+      + (m.restricciones?'<span style="color:var(--alert)">'+esc(m.restricciones)+'</span>':'')
+      + (m.tolerancia?'<span class="mono" style="color:var(--ink-3)">tol. '+esc(m.tolerancia)+'</span>':'')
+      + '</span></span>'
+      + '<span style="text-align:right"><span class="amt" style="display:block">'+money(h.gastado,{corto:1})+'</span>'
+      + (h.debe>0?'<span class="pill sena" style="margin-top:4px">debe '+money(h.debe,{corto:1})+'</span>':'')
+      + '</span></button>';
+  }).join("")+'</div></div>';
+
+  return {titulo:"Comensales", sub:state.comensales.length+" en la libreta",
+    acciones:'<button class="btn pri" data-act="nuevo-comensal">'+I.mas+'Sumar</button>', html:html};
+}
+
+function scrComensal(){
+  const m=comensal(ui.comensalId), h=historialComensal(m.id);
+  let html='<div class="grid g-stats" style="margin-bottom:14px">'
+    + tile("Vino a", h.vinieron+"", h.veces+(h.veces===1?" reserva":" reservas"), h.vinieron>1?"accent":"")
+    + tile("Gastó", money(h.gastado,{corto:1}), h.faltaron?h.faltaron+" ausencias":"Sin ausencias","in")
+    + tile("Debe", money(h.debe,{corto:1}), h.debe>0?"Pendiente de cobro":"Al día", h.debe>0?"neg":"pos")
+    + tile("Última", h.ultima?fechaCorta(h.ultima.fecha):"—", h.ultima?esc(h.ultima.nombre):"Todavía no vino","")
+    + '</div>';
+
+  html += '<div class="grid g-2" style="align-items:start">';
+  html += '<div class="card"><div class="card-h"><h3>Ficha</h3>'
+    + '<button class="btn sm" data-act="editar-comensal" data-id="'+m.id+'" style="margin-left:auto">'+I.lapiz+'Editar</button></div>'
+    + '<div class="card-b stack" style="gap:13px">'
+    + fila("Instagram", m.ig||"—")
+    + fila("Teléfono", m.tel||"—")
+    + fila("Restricciones", m.restricciones||"Ninguna", m.restricciones?"var(--alert)":"")
+    + fila("Tolerancia", m.tolerancia||"—", m.tolerancia==="Baja"?"var(--warn)":"")
+    + (m.notas?'<div><div style="font-size:12px;font-weight:600;color:var(--ink-2);letter-spacing:.03em;margin-bottom:4px">NOTAS</div><div style="font-size:14px;white-space:pre-wrap">'+esc(m.notas)+'</div></div>':'')
+    + '</div></div>';
+
+  html += '<div class="card"><div class="card-h"><h3>Historial</h3></div>';
+  if(!h.reservas.length){ html+=vacio("Todavía no reservó ninguna cena."); }
+  else{
+    html += '<div class="list">'+h.reservas.map(r=>{
+      const c=cena(r.cenaId); if(!c) return "";
+      const saldo=Math.max(0,(Number(r.precio)||0)-(Number(r.pagado)||0));
+      return '<button class="item" data-act="abrir-cena" data-id="'+c.id+'">'
+        + '<span class="grow"><span class="ttl">'+esc(c.nombre)+'</span>'
+        + '<span class="sub"><span class="mono">'+esc(fechaCorta(c.fecha))+'</span><span class="mono">cupo '+r.asiento+'</span>'
+        + (r.metodo?'<span style="color:var(--ink-3)">'+esc(r.metodo)+'</span>':'')+'</span></span>'
+        + '<span style="text-align:right">'+pill(r.estado)
+        + '<span class="amt" style="display:block;font-size:12.5px;margin-top:4px;color:var('+(saldo>0?"--warn":"--ink-3")+')">'
+        + (saldo>0?"debe "+money(saldo):money(r.pagado))+'</span></span></button>';
+    }).join("")+'</div>';
+  }
+  html+='</div></div>';
+
+  return {titulo:m.nombre, sub:esc(m.ig||"")+(m.tel?' · <span class="mono">'+esc(m.tel)+'</span>':''),
+    acciones:'<button class="btn" data-act="editar-comensal" data-id="'+m.id+'">'+I.lapiz+'Editar</button>', html:html};
+}
+function fila(k,v,color){
+  return '<div style="display:flex;justify-content:space-between;gap:14px;align-items:baseline;padding-bottom:11px;border-bottom:1px solid var(--line-soft)">'
+    + '<span style="font-size:12.5px;color:var(--ink-3);font-weight:600;letter-spacing:.03em">'+esc(k)+'</span>'
+    + '<span style="font-size:14px;text-align:right'+(color?';color:'+color:"")+'">'+esc(v)+'</span></div>';
+}
+
+/* --------------------------------------------------- pantalla: NÚMEROS */
+function scrNumeros(){
+  const meses=mesesConDatos();
+  if(ui.mes && meses.indexOf(ui.mes)<0) meses.unshift(ui.mes);
+  const M=cuentasMes(ui.mes);
+
+  const selector='<div class="row" style="margin-bottom:16px">'
+    + '<select class="inp mono" id="selMes" data-act="cambiar-mes" style="max-width:190px">'
+    + meses.map(k=>'<option value="'+k+'"'+(k===ui.mes?" selected":"")+'>'+esc(fechaMes(k+"-01"))+'</option>').join("")
+    + '</select>'
+    + '<button class="btn" data-act="nuevo-mov">'+I.mas+'Cargar movimiento</button>'
+    + '<button class="btn sm" data-act="exportar-numeros" style="margin-left:auto">'+I.copia+'Exportar CSV</button></div>';
+
+  let html=selector;
+
+  html += '<div class="grid g-stats" style="margin-bottom:14px">'
+    + tile("Entró", money(M.ingresos,{corto:1}), money(M.cupos,{corto:1})+" de cupos"+(M.otros?" + "+money(M.otros,{corto:1})+" otros":""), "in")
+    + tile("Salió", money(M.gastos,{corto:1}), M.movs.filter(x=>x.tipo==="gasto").length+" gastos", "out")
+    + tile("Margen", money(M.margen,{corto:1}), M.ingresos>0?Math.round(100*M.margen/M.ingresos)+"% de lo que entró":"—", M.margen>=0?"pos":"neg")
+    + tile("Por cobrar", money(M.porCobrar,{corto:1}), M.comensales+" comensales en el mes", M.porCobrar>0?"neg":"")
+    + '</div>';
+
+  /* --- cena por cena: barras agrupadas, dos series --- */
+  const filas=M.cenas.slice().sort((a,b)=>a.fecha.localeCompare(b.fecha)).map(c=>{
+    const q=cuentasCena(c);
+    return {c:c, ent:q.cobrado+q.otros, sal:q.gastos, mg:q.margen};
+  });
+  const maxV=Math.max(1, ...filas.map(f=>Math.max(f.ent,f.sal)));
+
+  html += '<div class="card" style="margin-bottom:14px"><div class="card-h"><h3>Cena por cena</h3>'
+    + '<span class="pill neutral" style="margin-left:auto">'+fechaMes(ui.mes+"-01")+'</span></div><div class="card-b">';
+  if(!filas.length){
+    html += vacio("No hubo cenas este mes.");
+  }else{
+    html += '<div class="legend"><span class="li"><span class="sw in"></span>Entró</span><span class="li"><span class="sw out"></span>Salió</span></div>'
+      + '<div class="chart">'+filas.map(f=>
+        '<div class="barrow"><div class="cn">'+esc(f.c.nombre)+'<small>'+esc(fechaCorta(f.c.fecha))+'</small></div>'
+        + '<div class="bars baseline">'
+        + '<div class="bar in" style="width:'+Math.max(0.6,100*f.ent/maxV).toFixed(1)+'%" data-tip="'+esc(f.c.nombre)+' · entró" data-tip2="'+esc(money(f.ent))+'"></div>'
+        + '<div class="bar out" style="width:'+Math.max(0.6,100*f.sal/maxV).toFixed(1)+'%" data-tip="'+esc(f.c.nombre)+' · salió" data-tip2="'+esc(money(f.sal))+'"></div>'
+        + '</div>'
+        + '<div class="mg" style="color:var('+(f.mg>=0?"--ok":"--alert")+')">'+money(f.mg,{corto:1})+'</div></div>'
+      ).join("")
+      + '<div class="scaleline"><span>0</span><span>'+esc(money(maxV,{corto:1}))+'</span></div></div>'
+      + '<p style="font-size:12.5px;color:var(--ink-2);margin-top:10px">La cifra de la derecha es el margen de cada noche.</p>';
+  }
+  html += '</div></div>';
+
+  /* --- gastos por categoría: magnitud, un solo tono, rótulo directo --- */
+  const porCat={};
+  M.movs.filter(m=>m.tipo==="gasto").forEach(m=>{ porCat[m.categoria||"Otros"]=(porCat[m.categoria||"Otros"]||0)+(Number(m.monto)||0); });
+  const cats=Object.keys(porCat).map(k=>({k:k,v:porCat[k]})).sort((a,b)=>b.v-a.v);
+  const maxC=Math.max(1,...cats.map(c=>c.v));
+
+  html += '<div class="grid g-2" style="align-items:start">';
+  html += '<div class="card"><div class="card-h"><h3>En qué se fue la plata</h3></div><div class="card-b">'
+    + (cats.length
+      ? '<div class="chart">'+cats.map(c=>
+          '<div class="catrow" data-tip="'+esc(c.k)+'" data-tip2="'+esc(money(c.v)+" · "+Math.round(100*c.v/Math.max(1,M.gastos))+"% de los gastos")+'">'
+          + '<span class="lab">'+esc(c.k)+'</span>'
+          + '<span class="amt">'+money(c.v,{corto:1})+'</span>'
+          + '<span class="track"><span class="fill" style="width:'+(100*c.v/maxC).toFixed(1)+'%"></span></span></div>'
+        ).join("")+'</div>'
+        + '<div class="scaleline"><span>0</span><span>'+esc(money(maxC,{corto:1}))+'</span></div>'
+      : vacio("No cargaste gastos este mes."))
+    + '</div></div>';
+
+  html += '<div class="card"><div class="card-h"><h3>Movimientos</h3>'
+    + '<span class="pill neutral" style="margin-left:auto">'+M.movs.length+'</span></div>'
+    + listaMovs(M.movs.slice().sort((a,b)=>b.fecha.localeCompare(a.fecha)))+'</div>';
+  html += '</div>';
+
+  const pend=saldosPendientes();
+  if(pend.length){
+    html += '<div class="card" style="margin-top:14px"><div class="card-h"><h3>Falta cobrar</h3>'
+      + '<span class="amt" style="margin-left:auto;color:var(--warn);font-size:16px">'+money(sum(pend,p=>p.saldo))+'</span></div>'
+      + '<div class="list">'+pend.map(p=>
+        '<button class="item" data-act="abrir-cena" data-id="'+p.cena.id+'">'
+        + '<span class="avatar">'+esc(p.comensal?iniciales(p.comensal.nombre):"?")+'</span>'
+        + '<span class="grow"><span class="ttl">'+esc(p.comensal?p.comensal.nombre:"—")+'</span>'
+        + '<span class="sub"><span>'+esc(p.cena.nombre)+'</span><span class="mono">'+esc(fechaCorta(p.cena.fecha))+'</span>'
+        + (p.comensal&&p.comensal.tel?'<span class="mono" style="color:var(--ink-3)">'+esc(p.comensal.tel)+'</span>':'')+'</span></span>'
+        + '<span class="amt" style="color:var(--warn)">'+money(p.saldo)+'</span></button>').join("")+'</div></div>';
+  }
+  return {titulo:"Números", sub:"Los cupos cobrados se suman solos desde cada mesa", acciones:"", html:html};
+}
+
+/* --------------------------------------------------- pantalla: MARCA */
+function scrMarca(){
+  const M=state.marca;
+  const html='<div class="grid g-2" style="align-items:start">'
+    + '<div class="card"><div class="card-h"><h3>Identidad</h3></div><div class="card-b stack" style="gap:18px">'
+    + '<div class="field"><label for="mNombre">Nombre</label>'
+    + '<input class="inp" id="mNombre" data-marca="nombre" value="'+esc(M.nombre)+'"></div>'
+    + '<div class="field"><label>Logo</label>'
+    + '<div class="logo-drop"><span class="logo-prev">'+(M.logoUrl?'<img src="'+esc(M.logoUrl)+'" alt="">':I.cuchillo)+'</span>'
+    + '<div class="stack" style="gap:7px;flex:1 1 auto;min-width:0">'
+    + '<div class="row" style="gap:7px"><button class="btn sm" data-act="subir-logo">Subir imagen</button>'
+    + (M.logoUrl?'<button class="btn sm danger" data-act="quitar-logo">Quitar</button>':'')+'</div>'
+    + '<span class="hint">'+(ASSETS?"PNG o SVG, cuadrado. Se guarda en la nube y lo ven todos.":"Pegá una URL de imagen; para subir un archivo hace falta la nube.")+'</span>'
+    + '<input class="inp mono" id="mLogoUrl" data-marca="logoUrl" placeholder="https://…" value="'+esc(M.logoUrl)+'" style="font-size:12px">'
+    + '</div></div>'
+    + '<span class="hint">El cuchillo con la gota de resina es un dibujo provisional. Reemplazalo por el logo real de la marca.</span></div>'
+    + '<div class="fgrid">'
+    + '<div class="field"><label for="mAcento">Color de acento</label>'
+    + '<div class="swatch"><input type="color" id="mAcento" data-marca="acento" value="'+esc(M.acento)+'">'
+    + '<input class="inp mono" id="mAcentoHex" data-marca="acento" value="'+esc(M.acento)+'"></div>'
+    + '<span class="hint">Botones, cupos ocupados, número de paso.</span></div>'
+    + '<div class="field"><label for="mSegundo">Color secundario</label>'
+    + '<div class="swatch"><input type="color" id="mSegundo" data-marca="segundo" value="'+esc(M.segundo)+'">'
+    + '<input class="inp mono" id="mSegundoHex" data-marca="segundo" value="'+esc(M.segundo)+'"></div>'
+    + '<span class="hint">Maridajes, resina, gráfico de ingresos.</span></div>'
+    + '</div>'
+    + '<div class="hint">Para el tema claro los dos colores se oscurecen solos para que el texto siga legible.</div>'
+    + '</div></div>'
+
+    + '<div class="stack">'
+    + '<div class="card"><div class="card-h"><h3>Valores por defecto</h3></div><div class="card-b fgrid">'
+    + '<div class="field"><label for="mMoneda">Moneda</label>'
+    + '<select class="inp mono" id="mMoneda" data-marca="moneda">'
+    + ["ARS","USD","EUR","UYU","CLP","MXN","COP","BRL","PEN"].map(x=>'<option'+(M.moneda===x?" selected":"")+'>'+x+'</option>').join("")
+    + '</select></div>'
+    + '<div class="field"><label for="mPrecio">Precio del cupo</label>'
+    + '<input class="inp mono" id="mPrecio" type="number" min="0" step="1000" data-marca="precioDefault" value="'+esc(M.precioDefault)+'"></div>'
+    + '<div class="field"><label for="mSena">Seña sugerida</label>'
+    + '<input class="inp mono" id="mSena" type="number" min="0" step="1000" data-marca="senaDefault" value="'+esc(M.senaDefault)+'"></div>'
+    + '</div></div>'
+
+    + '<div class="card"><div class="card-h"><h3>Cómo se ve</h3></div><div class="card-b stack" style="gap:12px">'
+    + '<div class="row"><button class="btn pri">Botón principal</button><button class="btn">Secundario</button>'
+    + '<span class="pill vino"><span class="bullet"></span>Vino</span><span class="pill sena"><span class="bullet"></span>Señó</span></div>'
+    + '<div class="paso" style="border:1px solid var(--line);border-radius:var(--r);padding:14px"><div class="n">03</div>'
+    + '<div><div class="plato">Provoleta ahumada con miel de romero</div>'
+    + '<div class="maridaje"><span class="ex">Sherbhead</span><span class="meta"><span>Live rosin</span><span>73-90µ</span><span>200&nbsp;°C</span></span></div></div></div>'
+    + '<div class="grid" style="grid-template-columns:1fr 1fr;gap:10px">'
+    + tile("Entró","$ 784.000","ejemplo","in")+tile("Salió","$ 511.000","ejemplo","out")+'</div>'
+    + '</div></div>'
+
+    + '<div class="card"><div class="card-h"><h3>Datos</h3></div><div class="card-b stack" style="gap:12px">'
+    + '<div style="font-size:13.5px;color:var(--ink-2)">'
+    + (DB ? "Guardado en la nube: los cambios aparecen en todos los dispositivos que abran este link."
+          : "Guardado en este navegador. Si abrís el link en otro dispositivo, ahí empieza vacío.")
+    + '</div>'
+    + '<div class="row"><button class="btn sm" data-act="exportar-todo">'+I.copia+'Exportar todo (CSV)</button>'
+    + '<button class="btn sm danger" data-act="vaciar">'+I.tacho+'Borrar todo</button></div>'
+    + '<div class="hint">Borrar todo elimina cenas, comensales, reservas y movimientos. No se puede deshacer.</div>'
+    + '</div></div></div></div>';
+
+  return {titulo:"Marca", sub:"Colores, logo y valores por defecto", acciones:"", html:html};
+}
+
+/* ============================================================ HOJAS (modales) */
+let sheetOk=null;
+function sheet(o){
+  const s=$("#scrim");
+  s.innerHTML='<div class="sheet" role="dialog" aria-modal="true" aria-label="'+esc(o.titulo)+'">'
+    + '<div class="sheet-h"><h3>'+esc(o.titulo)+'</h3>'
+    + '<button class="iconbtn" data-act="cerrar" aria-label="Cerrar">'+I.x+'</button></div>'
+    + '<form class="sheet-b" id="sheetForm" novalidate>'+o.cuerpo+'</form>'
+    + '<div class="sheet-f">'+(o.extra||'')+'<span class="grow"></span>'
+    + '<button class="btn" data-act="cerrar">Cancelar</button>'
+    + '<button class="btn pri" data-act="ok">'+esc(o.ok||"Guardar")+'</button></div></div>';
+  s.hidden=false;
+  sheetOk=o.onOk||null;
+  if(o.despues) o.despues();
+  const f=s.querySelector("input:not([type=hidden]),select,textarea");
+  if(f) setTimeout(()=>f.focus(),40);
+}
+function cerrarSheet(){ const s=$("#scrim"); s.hidden=true; s.innerHTML=""; sheetOk=null; }
+function datos(){
+  const o={};
+  $$("#sheetForm [name]").forEach(el=>{
+    if(el.type==="checkbox") o[el.name]=el.checked;
+    else o[el.name]=el.value;
+  });
+  $$("#sheetForm .seg [aria-pressed=true][data-seg]").forEach(b=> o[b.dataset.seg]=b.dataset.v);
+  return o;
+}
+function campo(lbl,html,hint,ancho){
+  return '<div class="field'+(ancho?" wide":"")+'"><label>'+esc(lbl)+'</label>'+html+(hint?'<span class="hint">'+hint+'</span>':'')+'</div>';
+}
+function segCampo(name,opts,valor){
+  return '<div class="seg" style="flex-wrap:wrap">'+opts.map(([v,l])=>
+    '<button type="button" data-seg="'+name+'" data-v="'+esc(v)+'" aria-pressed="'+(v===valor)+'">'+esc(l)+'</button>').join("")+'</div>';
+}
+function toast(m){
+  const t=$("#toast"); t.textContent=m; t.classList.add("on");
+  clearTimeout(toast._t); toast._t=setTimeout(()=>t.classList.remove("on"),2600);
+}
+
+/* --------------------------------------------------- form: cena */
+function formCena(id){
+  const c=id?cena(id):null, M=state.marca;
+  sheet({
+    titulo:c?"Editar cena":"Nueva cena",
+    ok:c?"Guardar":"Crear",
+    extra:c?'<button class="btn danger" data-act="borrar-cena" data-id="'+c.id+'">'+I.tacho+'Borrar</button>':'',
+    cuerpo:'<div class="fgrid">'
+      + campo("Nombre",'<input class="inp" name="nombre" value="'+esc(c?c.nombre:"")+'" placeholder="Cena 09 · Hachís Tradicional">',"",1)
+      + campo("Fecha",'<input class="inp mono" name="fecha" type="date" value="'+esc(c?c.fecha:hoyISO())+'">')
+      + campo("Hora",'<input class="inp mono" name="hora" type="time" value="'+esc(c?c.hora:"20:30")+'">')
+      + campo("Lugar",'<input class="inp" name="lugar" value="'+esc(c?c.lugar:"")+'" placeholder="Loft en Villa Crespo">',"",1)
+      + campo("Cupos",'<input class="inp mono" name="cupos" type="number" min="1" max="60" value="'+esc(c?c.cupos:10)+'">')
+      + campo("Precio del cupo",'<input class="inp mono" name="precio" type="number" min="0" step="1000" value="'+esc(c?c.precio:M.precioDefault)+'">')
+      + campo("Seña sugerida",'<input class="inp mono" name="sena" type="number" min="0" step="1000" value="'+esc(c?c.sena:M.senaDefault)+'">')
+      + campo("Estado",segCampo("estado",[["borrador","Borrador"],["abierta","Abierta"],["cerrada","Cerrada"]],c?c.estado:"borrador"),
+              "Abierta = se están tomando reservas.",1)
+      + campo("Notas de la noche",'<textarea class="inp" name="notas" placeholder="Qué falta comprar, quién ayuda, a qué hora llega el hielo…">'+esc(c?c.notas:"")+'</textarea>',"",1)
+      + '</div>',
+    onOk:()=>{
+      const v=datos();
+      if(!v.nombre.trim()){ toast("Ponele un nombre a la cena."); return false; }
+      const o=Object.assign({},c||{id:uid("cena")},{
+        nombre:v.nombre.trim(), fecha:v.fecha||hoyISO(), hora:v.hora||"",
+        lugar:v.lugar.trim(), cupos:clamp(parseInt(v.cupos,10)||1,1,60),
+        precio:Number(v.precio)||0, sena:Number(v.sena)||0,
+        estado:v.estado||"borrador", notas:v.notas
+      });
+      put("cenas",o);
+      if(!c){ ui.cenaId=o.id; ui.scr="cena"; ui.tabCena="mesa"; }
+      toast(c?"Cena guardada":"Cena creada");
+      return true;
+    }
+  });
+}
+
+/* --------------------------------------------------- form: reserva / cupo */
+function formReserva(cenaId,n){
+  const c=cena(cenaId);
+  const R=reservasDe(cenaId);
+  if(!n){ // primer asiento libre
+    const tom={}; R.forEach(r=>tom[r.asiento]=1);
+    n=1; while(tom[n] && n<=(c.cupos||1)) n++;
+    if(n>(c.cupos||1)){ toast("La mesa está completa. Sumá cupos desde Editar."); return; }
+  }
+  const r=R.find(x=>x.asiento===n)||null;
+  const m=r?comensal(r.comensalId):null;
+  const otros=state.comensales.slice().sort((a,b)=>(a.nombre||"").localeCompare(b.nombre||"","es"));
+
+  sheet({
+    titulo:"Cupo "+n,
+    ok:"Guardar",
+    extra:r?'<button class="btn danger" data-act="liberar" data-id="'+r.id+'">Liberar cupo</button>':'',
+    cuerpo:'<div class="fgrid">'
+      + campo("Quién viene",
+          '<select class="inp" name="comensalId" id="selComensal">'
+          + '<option value="__nuevo__">+ Persona nueva…</option>'
+          + otros.map(x=>'<option value="'+x.id+'"'+(m&&m.id===x.id?" selected":"")+'>'+esc(x.nombre)+(x.ig?" · "+esc(x.ig):"")+'</option>').join("")
+          + '</select>',"",1)
+      + '<div id="bloqueNuevo" class="wide" style="display:'+(m?"none":"block")+'"><div class="fgrid">'
+      + campo("Nombre",'<input class="inp" name="nuevoNombre" placeholder="Nombre y apellido">',"",1)
+      + campo("Instagram",'<input class="inp" name="nuevoIg" placeholder="@usuario">')
+      + campo("Teléfono",'<input class="inp mono" name="nuevoTel" placeholder="11 5555 5555">')
+      + campo("Restricciones",'<input class="inp" name="nuevoRestr" placeholder="Sin TACC, vegetariana, alérgica a…">',"",1)
+      + campo("Tolerancia",segCampo("nuevoTol",TOLERANCIAS.map(t=>[t,t]),"Media"),"Cuánto aguanta. Sirve para dosificar la cata.",1)
+      + '</div></div>'
+      + campo("Estado",segCampo("estado",[["sena","Señó"],["pago","Pagó todo"],["vino","Vino"],["falto","No vino"]],r?r.estado:"sena"),"",1)
+      + campo("Precio del cupo",'<input class="inp mono" name="precio" type="number" min="0" step="1000" value="'+esc(r?r.precio:(c.precio||0))+'">',"0 = cortesía")
+      + campo("Ya pagó",'<input class="inp mono" name="pagado" type="number" min="0" step="1000" value="'+esc(r?r.pagado:(c.sena||0))+'">')
+      + campo("Cómo pagó",'<select class="inp" name="metodo">'
+          + ["Transferencia","Mercado Pago","Efectivo","Cortesía","Otro"].map(x=>'<option'+(r&&r.metodo===x?" selected":"")+'>'+x+'</option>').join("")+'</select>')
+      + campo("Cupo",'<input class="inp mono" name="asiento" type="number" min="1" max="'+(c.cupos||1)+'" value="'+n+'">')
+      + campo("Notas de la reserva",'<textarea class="inp" name="notas" placeholder="Viene con alguien, paga en la puerta, cumple años…">'+esc(r?r.notas:"")+'</textarea>',"",1)
+      + '</div>',
+    despues:()=>{
+      const sel=$("#selComensal");
+      if(sel) sel.addEventListener("change",()=>{ $("#bloqueNuevo").style.display = sel.value==="__nuevo__" ? "block":"none"; });
+    },
+    onOk:()=>{
+      const v=datos();
+      let cid=v.comensalId;
+      if(cid==="__nuevo__"){
+        if(!String(v.nuevoNombre||"").trim()){ toast("¿Cómo se llama?"); return false; }
+        const nm={id:uid("com"),nombre:v.nuevoNombre.trim(),ig:(v.nuevoIg||"").trim(),tel:(v.nuevoTel||"").trim(),
+                  restricciones:(v.nuevoRestr||"").trim(),tolerancia:v.nuevoTol||"Media",notas:""};
+        put("comensales",nm); cid=nm.id;
+      }
+      const asiento=clamp(parseInt(v.asiento,10)||n,1,c.cupos||1);
+      const choque=R.find(x=>x.asiento===asiento && (!r||x.id!==r.id));
+      if(choque){ toast("El cupo "+asiento+" ya está tomado."); return false; }
+      put("reservas", Object.assign({},r||{id:uid("res"),cenaId:cenaId},{
+        comensalId:cid, asiento:asiento, estado:v.estado||"sena",
+        precio:Number(v.precio)||0, pagado:Number(v.pagado)||0,
+        metodo:v.metodo||"", notas:v.notas||""
+      }));
+      toast(r?"Cupo actualizado":"Cupo tomado");
+      return true;
+    }
+  });
+}
+
+/* --------------------------------------------------- form: paso */
+function formPaso(cenaId,id){
+  const p=id?porId("pasos",id):null;
+  const sig=pasosDe(cenaId).length+1;
+  sheet({
+    titulo:p?("Paso "+p.n):"Nuevo paso",
+    extra:p?'<button class="btn danger" data-act="borrar-paso" data-id="'+p.id+'">'+I.tacho+'Borrar</button>':'',
+    cuerpo:'<div class="fgrid">'
+      + campo("N°",'<input class="inp mono" name="n" type="number" min="1" max="30" value="'+esc(p?p.n:sig)+'">')
+      + campo("Plato",'<input class="inp" name="plato" value="'+esc(p?p.plato:"")+'" placeholder="Provoleta ahumada con miel de romero">',"",1)
+      + campo("Extracto",'<input class="inp" name="extracto" value="'+esc(p?p.extracto:"")+'" placeholder="Sherbhead">')
+      + campo("Tipo",'<select class="inp" name="tipo">'+TIPOS_EXTRACTO.map(t=>'<option'+(p&&p.tipo===t?" selected":"")+'>'+t+'</option>').join("")+'</select>')
+      + campo("Micras",'<input class="inp mono" name="micras" value="'+esc(p?p.micras:"")+'" placeholder="73-90µ">')
+      + campo("Temperatura",'<input class="inp mono" name="temp" type="number" min="120" max="260" value="'+esc(p?p.temp:200)+'">',"°C de dabeo. Bajo saca terpenos, alto saca cuerpo.")
+      + campo("Terpenos",'<input class="inp" name="terps" value="'+esc(p?p.terps:"")+'" placeholder="limoneno · linalol">',"",1)
+      + campo("Por qué marida",'<textarea class="inp" name="nota" placeholder="Qué buscás que pase entre el plato y el extracto">'+esc(p?p.nota:"")+'</textarea>',"",1)
+      + '</div>',
+    onOk:()=>{
+      const v=datos();
+      if(!v.plato.trim()){ toast("Falta el plato."); return false; }
+      put("pasos",Object.assign({},p||{id:uid("paso"),cenaId:cenaId},{
+        n:clamp(parseInt(v.n,10)||sig,1,30), plato:v.plato.trim(), extracto:v.extracto.trim(),
+        tipo:v.tipo, micras:v.micras.trim(), temp:Number(v.temp)||null, terps:v.terps.trim(), nota:v.nota
+      }));
+      toast(p?"Paso guardado":"Paso agregado");
+      return true;
+    }
+  });
+}
+
+/* --------------------------------------------------- form: movimiento */
+function formMov(id,cenaId){
+  const m=id?porId("movimientos",id):null;
+  const tipo=m?m.tipo:"gasto";
+  const cs=cenasOrdenadas();
+  const cats=(t)=> (t==="ingreso"?CAT_INGRESO:CAT_GASTO);
+  sheet({
+    titulo:m?"Editar movimiento":"Cargar movimiento",
+    extra:m?'<button class="btn danger" data-act="borrar-mov" data-id="'+m.id+'">'+I.tacho+'Borrar</button>':'',
+    cuerpo:'<div class="fgrid">'
+      + campo("Qué es",segCampo("tipo",[["gasto","Gasto"],["ingreso","Otro ingreso"]],tipo),
+              "Los cupos cobrados ya se suman solos desde la mesa. Acá van gastos y ventas extra.",1)
+      + campo("Monto",'<input class="inp mono" name="monto" type="number" min="0" step="1000" value="'+esc(m?m.monto:"")+'" placeholder="0">')
+      + campo("Fecha",'<input class="inp mono" name="fecha" type="date" value="'+esc(m?m.fecha:hoyISO())+'">')
+      + campo("Categoría",'<select class="inp" name="categoria" id="selCat">'
+          + cats(tipo).map(x=>'<option'+(m&&m.categoria===x?" selected":"")+'>'+x+'</option>').join("")+'</select>',"",1)
+      + campo("Concepto",'<input class="inp" name="concepto" value="'+esc(m?m.concepto:"")+'" placeholder="6 extractos para la cata">',"",1)
+      + campo("¿De qué cena?",'<select class="inp" name="cenaId"><option value="">General (no es de una cena)</option>'
+          + cs.map(c=>'<option value="'+c.id+'"'+((m&&m.cenaId===c.id)||(!m&&cenaId===c.id)?" selected":"")+'>'+esc(c.nombre)+' · '+esc(fechaCorta(c.fecha))+'</option>').join("")+'</select>',"",1)
+      + '</div>',
+    despues:()=>{
+      $$("#sheetForm [data-seg=tipo]").forEach(b=> b.addEventListener("click",()=>{
+        setTimeout(()=>{
+          const t=($("#sheetForm [data-seg=tipo][aria-pressed=true]")||{dataset:{v:"gasto"}}).dataset.v;
+          $("#selCat").innerHTML = cats(t).map(x=>'<option>'+x+'</option>').join("");
+        },0);
+      }));
+    },
+    onOk:()=>{
+      const v=datos();
+      const monto=Number(v.monto)||0;
+      if(monto<=0){ toast("El monto tiene que ser mayor a cero."); return false; }
+      put("movimientos",Object.assign({},m||{id:uid("mov")},{
+        tipo:v.tipo||"gasto", monto:monto, fecha:v.fecha||hoyISO(),
+        categoria:v.categoria||"Otros", concepto:v.concepto.trim(), cenaId:v.cenaId||null
+      }));
+      toast(m?"Movimiento guardado":"Movimiento cargado");
+      return true;
+    }
+  });
+}
+
+/* --------------------------------------------------- form: comensal */
+function formComensal(id){
+  const m=id?comensal(id):null;
+  sheet({
+    titulo:m?"Editar ficha":"Nueva persona",
+    extra:m?'<button class="btn danger" data-act="borrar-comensal" data-id="'+m.id+'">'+I.tacho+'Borrar</button>':'',
+    cuerpo:'<div class="fgrid">'
+      + campo("Nombre",'<input class="inp" name="nombre" value="'+esc(m?m.nombre:"")+'" placeholder="Nombre y apellido">',"",1)
+      + campo("Instagram",'<input class="inp" name="ig" value="'+esc(m?m.ig:"")+'" placeholder="@usuario">')
+      + campo("Teléfono",'<input class="inp mono" name="tel" value="'+esc(m?m.tel:"")+'" placeholder="11 5555 5555">')
+      + campo("Restricciones",'<input class="inp" name="restricciones" value="'+esc(m?m.restricciones:"")+'" placeholder="Sin TACC, vegana, alérgica a frutos secos…">',
+              "Aparece como alerta en Hoy antes de cada cena.",1)
+      + campo("Tolerancia",segCampo("tolerancia",TOLERANCIAS.map(t=>[t,t]),m?m.tolerancia:"Media"),
+              "Baja te avisa que arranques con dosis chicas.",1)
+      + campo("Notas",'<textarea class="inp" name="notas" placeholder="Qué le gustó, con quién vino, qué contarle la próxima…">'+esc(m?m.notas:"")+'</textarea>',"",1)
+      + '</div>',
+    onOk:()=>{
+      const v=datos();
+      if(!v.nombre.trim()){ toast("Falta el nombre."); return false; }
+      put("comensales",Object.assign({},m||{id:uid("com")},{
+        nombre:v.nombre.trim(), ig:v.ig.trim(), tel:v.tel.trim(),
+        restricciones:v.restricciones.trim(), tolerancia:v.tolerancia||"Media", notas:v.notas
+      }));
+      toast(m?"Ficha guardada":"Persona agregada");
+      return true;
+    }
+  });
+}
+
+/* ============================================================ EXPORTAR */
+function csv(filas){
+  return filas.map(f=>f.map(c=>{
+    const s=String(c==null?"":c);
+    return /[",;\n]/.test(s) ? '"'+s.replace(/"/g,'""')+'"' : s;
+  }).join(",")).join("\r\n");
+}
+async function bajar(nombre,texto){
+  if(DOWNLOADS){
+    try{ await DOWNLOADS.save({filename:nombre,data:"﻿"+texto}); toast("Archivo listo"); return; }
+    catch(e){
+      const c=e&&e.code;
+      if(c==="declined") return;
+      if(c==="rate_limited"){ toast("Esperá unos segundos y probá de nuevo."); return; }
+    }
+  }
+  try{ await navigator.clipboard.writeText(texto); toast("Copiado al portapapeles — pegalo en una planilla"); }
+  catch(e){ toast("No se pudo exportar desde este navegador."); }
+}
+function exportarCena(id){
+  const c=cena(id);
+  const f=[["Cupo","Nombre","Instagram","Teléfono","Estado","Precio","Pagó","Debe","Método","Restricciones","Tolerancia","Notas"]];
+  reservasDe(id).forEach(r=>{
+    const m=comensal(r.comensalId)||{};
+    f.push([r.asiento,m.nombre||"",m.ig||"",m.tel||"",(ESTADOS[r.estado]||{}).lbl||r.estado,
+            r.precio,r.pagado,Math.max(0,(r.precio||0)-(r.pagado||0)),r.metodo||"",m.restricciones||"",m.tolerancia||"",r.notas||""]);
+  });
+  bajar(("mesa-"+c.nombre).replace(/[^\w\-]+/g,"-").toLowerCase()+".csv", csv(f));
+}
+function exportarComensales(){
+  const f=[["Nombre","Instagram","Teléfono","Restricciones","Tolerancia","Cenas","Vino","Faltó","Gastó","Debe","Notas"]];
+  state.comensales.forEach(m=>{
+    const h=historialComensal(m.id);
+    f.push([m.nombre,m.ig||"",m.tel||"",m.restricciones||"",m.tolerancia||"",h.veces,h.vinieron,h.faltaron,h.gastado,h.debe,m.notas||""]);
+  });
+  bajar("comensales.csv",csv(f));
+}
+function exportarNumeros(mes){
+  const M=cuentasMes(mes);
+  const f=[["Fecha","Tipo","Categoría","Concepto","Cena","Monto"]];
+  M.cenas.forEach(c=>{
+    reservasDe(c.id).filter(r=>(r.pagado||0)>0).forEach(r=>{
+      const m=comensal(r.comensalId)||{};
+      f.push([c.fecha,"ingreso","Cupos","Cupo "+r.asiento+" · "+(m.nombre||""),c.nombre,r.pagado]);
+    });
+  });
+  M.movs.forEach(m=> f.push([m.fecha,m.tipo,m.categoria,m.concepto,m.cenaId?(cena(m.cenaId)||{}).nombre||"":"",m.monto]));
+  f.push([]); f.push(["TOTAL ENTRÓ","","","","",M.ingresos]);
+  f.push(["TOTAL SALIÓ","","","","",M.gastos]);
+  f.push(["MARGEN","","","","",M.margen]);
+  f.push(["POR COBRAR","","","","",M.porCobrar]);
+  bajar("numeros-"+mes+".csv",csv(f));
+}
+function exportarTodo(){
+  const f=[["TABLA","id","a","b","c","d","e","f"]];
+  state.cenas.forEach(c=>f.push(["cena",c.id,c.nombre,c.fecha,c.lugar,c.cupos,c.precio,c.estado]));
+  state.comensales.forEach(m=>f.push(["comensal",m.id,m.nombre,m.ig,m.tel,m.restricciones,m.tolerancia,m.notas]));
+  state.reservas.forEach(r=>f.push(["reserva",r.id,r.cenaId,r.comensalId,r.asiento,r.estado,r.precio,r.pagado]));
+  state.pasos.forEach(p=>f.push(["paso",p.id,p.cenaId,p.n,p.plato,p.extracto,p.tipo,p.temp]));
+  state.movimientos.forEach(m=>f.push(["movimiento",m.id,m.fecha,m.tipo,m.categoria,m.concepto,m.cenaId||"",m.monto]));
+  bajar("sticky-knife-backup.csv",csv(f));
+}
+
+/* ============================================================ EVENTOS */
+document.addEventListener("click",function(ev){
+  const t=ev.target.closest("[data-act],[data-go],[data-seg]");
+  if(!t) return;
+
+  if(t.dataset.seg!=null){
+    ev.preventDefault();
+    const g=t.closest(".seg");
+    $$("[data-seg='"+t.dataset.seg+"']",g).forEach(b=>b.setAttribute("aria-pressed","false"));
+    t.setAttribute("aria-pressed","true");
+    return;
+  }
+  if(t.dataset.go){ ui.scr=t.dataset.go; render(); window.scrollTo(0,0); return; }
+
+  const a=t.dataset.act, id=t.dataset.id;
+  switch(a){
+    case "ok":{ ev.preventDefault(); if(!sheetOk || sheetOk()!==false) cerrarSheet(); break; }
+    case "cerrar": ev.preventDefault(); cerrarSheet(); break;
+
+    case "nueva-cena": formCena(null); break;
+    case "editar-cena": formCena(id); break;
+    case "abrir-cena": ui.cenaId=id; ui.scr="cena"; ui.tabCena="mesa"; render(); window.scrollTo(0,0); break;
+    case "borrar-cena":
+      if(confirm("¿Borrar esta cena con todas sus reservas, pasos y movimientos?")){
+        state.reservas.filter(r=>r.cenaId===id).forEach(r=>quitar("reservas",r.id));
+        state.pasos.filter(p=>p.cenaId===id).forEach(p=>quitar("pasos",p.id));
+        state.movimientos.filter(m=>m.cenaId===id).forEach(m=>quitar("movimientos",m.id));
+        quitar("cenas",id); cerrarSheet(); ui.scr="cenas"; toast("Cena borrada");
+      }
+      break;
+    case "tab-cena": ui.tabCena=t.dataset.k; render(); break;
+    case "filtro-cenas": ui.filtroCenas=t.dataset.k; render(); break;
+
+    case "asiento": formReserva(ui.cenaId, parseInt(t.dataset.n,10)||0); break;
+    case "liberar":
+      if(confirm("¿Liberar el cupo? La persona queda en la libreta.")){ quitar("reservas",id); cerrarSheet(); toast("Cupo liberado"); }
+      break;
+
+    case "nuevo-paso": formPaso(ui.cenaId,null); break;
+    case "editar-paso": formPaso(ui.cenaId,id); break;
+    case "borrar-paso":
+      if(confirm("¿Borrar este paso?")){ quitar("pasos",id); cerrarSheet(); toast("Paso borrado"); }
+      break;
+
+    case "nuevo-mov": formMov(null, t.dataset.cena||ui.cenaId||null); break;
+    case "editar-mov": formMov(id,null); break;
+    case "borrar-mov":
+      if(confirm("¿Borrar este movimiento?")){ quitar("movimientos",id); cerrarSheet(); toast("Movimiento borrado"); }
+      break;
+
+    case "nuevo-comensal": formComensal(null); break;
+    case "editar-comensal": formComensal(id); break;
+    case "abrir-comensal": ui.comensalId=id; ui.scr="comensal"; render(); window.scrollTo(0,0); break;
+    case "borrar-comensal":
+      if(confirm("¿Borrar la ficha? Sus reservas quedan sin nombre.")){ quitar("comensales",id); cerrarSheet(); ui.scr="comensales"; toast("Ficha borrada"); }
+      break;
+
+    case "ver-numeros": ui.scr="numeros"; render(); window.scrollTo(0,0); break;
+    case "exportar-cena": exportarCena(id); break;
+    case "exportar-comensales": exportarComensales(); break;
+    case "exportar-numeros": exportarNumeros(ui.mes); break;
+    case "exportar-todo": exportarTodo(); break;
+
+    case "subir-logo": subirLogo(); break;
+    case "quitar-logo": state.marca.logoUrl=""; state.marca.logoAssetId=""; guardarMarca(); break;
+    case "vaciar":
+      if(confirm("¿Borrar TODO? Cenas, comensales, reservas, pasos y movimientos. No se puede deshacer.")){
+        vaciarTodo(); toast("Listo, todo vacío");
+      }
+      break;
+  }
+});
+
+$("#backBtn").addEventListener("click",()=>{
+  ui.scr = ui.scr==="cena" ? "cenas" : "comensales";
+  render(); window.scrollTo(0,0);
+});
+$("#scrim").addEventListener("click",e=>{ if(e.target.id==="scrim") cerrarSheet(); });
+document.addEventListener("keydown",e=>{
+  if(e.key==="Escape" && !$("#scrim").hidden) cerrarSheet();
+  if(e.key==="Enter" && (e.metaKey||e.ctrlKey) && !$("#scrim").hidden){
+    e.preventDefault(); if(!sheetOk || sheetOk()!==false) cerrarSheet();
+  }
+});
+document.addEventListener("submit",e=>{
+  if(e.target.id==="sheetForm"){ e.preventDefault(); if(!sheetOk || sheetOk()!==false) cerrarSheet(); }
+});
+document.addEventListener("input",e=>{
+  const el=e.target;
+  if(el.id==="qComensales"){ ui.qc=el.value; render(); return; }
+  if(el.dataset && el.dataset.marca){
+    const k=el.dataset.marca;
+    let v=el.value;
+    if(k==="precioDefault"||k==="senaDefault") v=Number(v)||0;
+    state.marca[k]=v;
+    if(k==="acento"||k==="segundo"){
+      const par = k==="acento" ? ["mAcento","mAcentoHex"] : ["mSegundo","mSegundoHex"];
+      par.forEach(idp=>{ const o=$("#"+idp); if(o && o!==el && /^#[\da-f]{6}$/i.test(v)) o.value=v; });
+      if(!/^#[\da-f]{6}$/i.test(v)) return;
+    }
+    aplicarMarca(); guardarLocal();
+    clearTimeout(document._mt); document._mt=setTimeout(()=>{ if(DB) DB.doc("config/marca").set(state.marca).catch(errDb); },600);
+  }
+});
+document.addEventListener("change",e=>{
+  if(e.target.id==="selMes"){ ui.mes=e.target.value; render(); }
+});
+
+/* tooltip de gráficos */
+(function(){
+  const tip=$("#tip");
+  document.addEventListener("mousemove",e=>{
+    const el=e.target.closest("[data-tip]");
+    if(!el){ tip.style.opacity=0; return; }
+    tip.innerHTML=esc(el.dataset.tip)+(el.dataset.tip2?'<b>'+esc(el.dataset.tip2)+'</b>':'');
+    tip.style.opacity=1;
+    const r=tip.getBoundingClientRect();
+    tip.style.left=clamp(e.clientX+14,8,window.innerWidth-r.width-8)+"px";
+    tip.style.top=clamp(e.clientY-r.height-10,8,window.innerHeight-r.height-8)+"px";
+  },{passive:true});
+  document.addEventListener("mouseleave",()=>{ tip.style.opacity=0; });
+})();
+
+/* tema */
+function temaActual(){ try{ return localStorage.getItem("stickyknife.tema")||"auto"; }catch(e){ return "auto"; } }
+function aplicarTema(t){
+  if(t==="auto") document.documentElement.removeAttribute("data-theme");
+  else document.documentElement.setAttribute("data-theme",t);
+  const l=$("#themeLbl"); if(l) l.textContent = t==="auto"?"Tema del sistema":t==="dark"?"Tema oscuro":"Tema claro";
+  try{ localStorage.setItem("stickyknife.tema",t); }catch(e){}
+}
+$("#themeBtn").addEventListener("click",()=>{
+  const orden=["auto","dark","light"];
+  aplicarTema(orden[(orden.indexOf(temaActual())+1)%3]);
+});
+
+/* la mesa cambia de forma según el ancho */
+let anchoPrev=window.innerWidth;
+window.addEventListener("resize",()=>{
+  const cruzo = (anchoPrev<620) !== (window.innerWidth<620);
+  anchoPrev=window.innerWidth;
+  if(cruzo) render();
+},{passive:true});
+
+/* logo */
+async function subirLogo(){
+  if(!ASSETS){ toast("Pegá la URL de la imagen en el campo de abajo."); return; }
+  const inp=document.createElement("input");
+  inp.type="file"; inp.accept="image/png,image/jpeg,image/webp,image/svg+xml";
+  inp.addEventListener("change",async()=>{
+    const f=inp.files&&inp.files[0]; if(!f) return;
+    try{
+      const r=await ASSETS.upload(f);
+      state.marca.logoAssetId=r.id;
+      state.marca.logoUrl="/_blob/"+r.id;
+      guardarMarca(); toast("Logo actualizado");
+    }catch(e){
+      toast(e&&e.code==="too_large" ? "La imagen pesa demasiado." : "No se pudo subir la imagen.");
+    }
+  });
+  inp.click();
+}
+
+/* ============================================================ ARRANQUE */
+function arrancar(){
+  const guardado=leerLocal();
+  if(guardado && (guardado.cenas.length||guardado.comensales.length||guardado.movimientos.length)){
+    state=Object.assign(state,guardado);
+  }else{
+    state=Object.assign(state,demoData());
+    guardarLocal();
+  }
+  const c=proximaCena(); if(c) ui.cenaId=c.id;
+  aplicarTema(temaActual());
+  aplicarMarca();
+  render();
+  conectarNube();
+}
+arrancar();
+
+})();
+</script>
