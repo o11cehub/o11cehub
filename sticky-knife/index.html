@@ -544,6 +544,7 @@ select.inp{cursor:pointer}
 }
 @media (max-width:520px){
   .wrap{padding-inline:16px}
+  .topbar h1{font-size:21px}
   .tile .val{font-size:31px}
   .barrow{grid-template-columns:1fr auto;gap:4px 10px}
   .barrow .bars{grid-column:1/-1}
@@ -1235,7 +1236,7 @@ function tabMesa(c,q){
   let html='<div class="card" style="margin-bottom:14px"><div class="card-b">'+mesaHTML(c,null)+'</div></div>';
 
   html += '<div class="grid g-stats" style="margin-bottom:14px">'
-    + tile("Cupos","<span class='mono'>"+q.ocupados+"/"+(c.cupos||0)+"</span>", q.libres>0?q.libres+" libres":"Mesa completa", q.libres>0?"":"accent")
+    + tile("Cupos", q.ocupados+"/"+(c.cupos||0), q.libres>0?q.libres+" libres":"Mesa completa", q.libres>0?"":"accent")
     + tile("Cobrado", money(q.cobrado,{corto:1}), R.filter(r=>r.estado==="pago"||r.estado==="vino").length+" pagaron todo","in")
     + tile("Por cobrar", money(q.porCobrar,{corto:1}), R.filter(r=>r.estado==="sena").length+" con seña", q.porCobrar>0?"neg":"")
     + tile("Margen", money(q.margen,{corto:1}), money(q.gastos,{corto:1})+" de gastos", q.margen>=0?"pos":"neg")
