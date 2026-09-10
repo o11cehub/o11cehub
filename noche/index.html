@@ -1,0 +1,1339 @@
+<title>La Noche Sticky Knife</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=Big+Shoulders+Display:wght@600;700;800&family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,600&family=JetBrains+Mono:wght@400;500&display=swap">
+
+<style>
+/* ============================================================
+   LA NOCHE · Sticky Knife
+   La web que abre el comensal durante la cena.
+
+   Un solo mundo visual, a propósito: esto se usa en una mesa
+   a media luz, con velas. No hay tema claro — una pantalla
+   blanca en esa mesa arruina la noche y la visión nocturna.
+   Todos los colores se pintan explícitos.
+   ============================================================ */
+:root{
+  /* --- paleta tomada del logo real --- */
+  --brasa:#E9541D;          /* naranja del círculo de la marca */
+  --rojo:#DE3126;           /* rojo del lettering STICKY KNIFE */
+  --verde:#5C8340;          /* verde de los cogollos, subido para leer en negro */
+  --resina:#E8B15C;         /* ámbar del extracto */
+
+  --noche:#08090B;
+  --carbon:#101318;
+  --carbon-2:#171B21;
+  --linea:#242931;
+  --linea-suave:#191D23;
+
+  --hueso:#F0E9D6;          /* crema de la hoja */
+  --ceniza:#959BA4;
+  --humo:#5B626C;
+
+  --ok:var(--verde);
+  --alerta:#DE3126;
+
+  --f-plato:"Fraunces",Georgia,"Times New Roman",serif;
+  --f-titulo:"Big Shoulders Display","Archivo Narrow",system-ui,sans-serif;
+  --f-texto:"Archivo",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-dato:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,monospace;
+
+  --r:12px; --r-lg:20px; --r-pill:999px;
+  color-scheme:dark;
+}
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; min-height:100vh;
+  background:var(--noche); color:var(--hueso);
+  font-family:var(--f-texto); font-size:16px; line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+h1,h2,h3{margin:0; font-weight:400; text-wrap:balance}
+p{margin:0}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer;-webkit-tap-highlight-color:transparent}
+input,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--brasa);outline-offset:3px;border-radius:6px}
+::selection{background:rgba(233,84,29,.34)}
+.dato{font-family:var(--f-dato);font-variant-numeric:tabular-nums}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* --- la brasa que ilumina la pantalla --- */
+.brasa-fondo{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(120% 62% at 50% -12%, rgba(233,84,29,.22), transparent 62%),
+    radial-gradient(90% 44% at 50% 108%, rgba(232,177,92,.09), transparent 60%);
+  animation:respirar 11s ease-in-out infinite;
+}
+@keyframes respirar{0%,100%{opacity:.82}50%{opacity:1}}
+
+/* ============================================================ marca */
+.marca{
+  position:relative;z-index:2;
+  display:flex;flex-direction:column;align-items:center;gap:9px;
+  padding:26px 20px 6px;text-align:center;
+}
+.marca .sello{
+  width:82px;height:82px;border-radius:22px;overflow:hidden;
+  display:grid;place-items:center;
+  background:linear-gradient(168deg,var(--carbon-2),var(--carbon));
+  border:1px solid var(--linea);
+  box-shadow:0 0 0 1px rgba(233,84,29,.16), 0 20px 50px -18px rgba(233,84,29,.55);
+}
+.marca .sello img{width:100%;height:100%;object-fit:cover;display:block}
+.marca .sello svg{width:50px;height:50px;display:block}
+.marca .nombre{
+  font-family:var(--f-titulo);font-weight:800;font-size:27px;
+  letter-spacing:.13em;text-transform:uppercase;line-height:1;
+}
+.marca .bajo{
+  font-family:var(--f-dato);font-size:10.5px;letter-spacing:.3em;
+  text-transform:uppercase;color:var(--humo);
+}
+.marca.chica{padding-top:16px;gap:7px}
+.marca.chica .sello{width:50px;height:50px;border-radius:14px}
+.marca.chica .sello svg{width:30px;height:30px}
+.marca.chica .nombre{font-size:17px;letter-spacing:.16em}
+.marca.chica .bajo{display:none}
+
+/* ============================================================ layout */
+.hoja{
+  position:relative;z-index:2;
+  width:100%;max-width:560px;margin-inline:auto;
+  padding-inline:22px; padding-block:0 120px;
+}
+.centro{text-align:center}
+.pila{display:flex;flex-direction:column;gap:18px}
+.fila{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+
+.rotulo{
+  font-family:var(--f-titulo);font-weight:700;font-size:12px;
+  letter-spacing:.24em;text-transform:uppercase;color:var(--humo);
+}
+.regla{height:1px;background:var(--linea);border:none;margin:0}
+.regla-brasa{
+  height:1px;border:none;margin:0;
+  background:linear-gradient(90deg,transparent,var(--brasa),transparent);
+  opacity:.5;
+}
+
+.tarjeta{
+  background:var(--carbon);border:1px solid var(--linea);
+  border-radius:var(--r-lg);padding:20px;
+}
+.tarjeta.tenue{background:var(--carbon-2);border-color:var(--linea-suave)}
+
+/* ============================================================ botones */
+.bt{
+  display:inline-flex;align-items:center;justify-content:center;gap:9px;
+  min-height:52px;padding:14px 24px;border-radius:var(--r-pill);
+  font-weight:600;font-size:16px;letter-spacing:.01em;
+  border:1px solid var(--linea);background:var(--carbon-2);color:var(--hueso);
+  transition:transform .1s, background .15s, border-color .15s;
+}
+.bt:active{transform:scale(.975)}
+.bt.pri{
+  background:var(--brasa);border-color:var(--brasa);color:#fff;
+  box-shadow:0 10px 30px -12px rgba(233,84,29,.75);
+}
+.bt.ancho{width:100%}
+.bt.chico{min-height:38px;padding:8px 16px;font-size:14px}
+.bt.plano{background:transparent;border-color:transparent;color:var(--ceniza)}
+.bt.plano:active{background:var(--carbon-2)}
+.bt svg{width:19px;height:19px;stroke-width:1.8;flex:0 0 19px}
+.bt[disabled]{opacity:.4;pointer-events:none}
+
+/* ============================================================ EL PASO */
+.paso-cab{
+  display:flex;align-items:baseline;gap:14px;
+  padding-top:6px;padding-bottom:14px;
+}
+.paso-n{
+  font-family:var(--f-titulo);font-weight:800;
+  font-size:clamp(58px,19vw,84px);line-height:.78;
+  color:var(--brasa);font-variant-numeric:tabular-nums;
+}
+.paso-de{
+  font-family:var(--f-dato);font-size:11.5px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--humo);line-height:1.5;
+}
+.plato{
+  font-family:var(--f-plato);font-weight:300;
+  font-size:clamp(29px,7.6vw,40px);line-height:1.12;
+  letter-spacing:-.012em;margin-top:2px;
+}
+.plato-desc{
+  font-size:15.5px;color:var(--ceniza);line-height:1.6;margin-top:13px;
+  max-width:48ch;
+}
+
+/* --- el extracto --- */
+.extracto{
+  margin-top:24px;padding:20px;border-radius:var(--r-lg);
+  background:linear-gradient(166deg, rgba(232,177,92,.11), rgba(232,177,92,.03));
+  border:1px solid rgba(232,177,92,.26);
+}
+.extracto .qva{
+  font-family:var(--f-titulo);font-weight:700;font-size:11.5px;
+  letter-spacing:.24em;text-transform:uppercase;color:var(--resina);opacity:.75;
+}
+.extracto .nom{
+  font-family:var(--f-plato);font-weight:600;font-size:26px;
+  color:var(--resina);line-height:1.15;margin-top:5px;
+}
+.extracto .fic{
+  display:flex;flex-wrap:wrap;gap:7px;margin-top:13px;
+}
+.chip-dato{
+  font-family:var(--f-dato);font-size:11.5px;letter-spacing:.03em;
+  padding:4px 10px;border-radius:var(--r-pill);
+  background:rgba(232,177,92,.11);border:1px solid rgba(232,177,92,.24);
+  color:var(--resina);white-space:nowrap;
+}
+.extracto .quien{
+  margin-top:14px;padding-top:13px;border-top:1px solid rgba(232,177,92,.2);
+  font-size:13.5px;color:var(--ceniza);
+}
+.extracto .quien b{color:var(--hueso);font-weight:600}
+
+/* --- el ritual --- */
+.ritual{margin-top:24px}
+.ritual ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px}
+.ritual li{
+  display:grid;grid-template-columns:32px 1fr;gap:14px;align-items:start;
+  padding:13px 0;border-bottom:1px solid var(--linea-suave);
+}
+.ritual li:last-child{border-bottom:none}
+.ritual .paso-i{
+  font-family:var(--f-titulo);font-weight:800;font-size:19px;
+  color:var(--brasa);text-align:center;line-height:1.35;
+}
+.ritual .txt{font-size:15.5px;line-height:1.5}
+.ritual .txt em{
+  font-style:normal;font-family:var(--f-dato);font-size:14px;
+  color:var(--resina);
+}
+
+/* ============================================================ UNA PALABRA */
+.palabra-zona{margin-top:30px}
+.pregunta{
+  font-family:var(--f-plato);font-weight:300;
+  font-size:clamp(25px,6.6vw,32px);line-height:1.18;text-align:center;
+}
+.sugeridas{
+  display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:18px;
+}
+.sug{
+  padding:10px 17px;border-radius:var(--r-pill);
+  border:1px solid var(--linea);background:var(--carbon-2);
+  font-size:15px;transition:transform .1s,border-color .15s,background .15s;
+}
+.sug:active{transform:scale(.94)}
+.sug[aria-pressed="true"]{
+  background:var(--brasa);border-color:var(--brasa);color:#fff;font-weight:600;
+}
+.campo-palabra{
+  display:flex;gap:9px;margin-top:16px;
+}
+.campo-palabra input{
+  flex:1 1 auto;min-width:0;
+  background:var(--carbon-2);border:1px solid var(--linea);
+  border-radius:var(--r-pill);padding:14px 20px;font-size:17px;
+  text-align:center;
+}
+.campo-palabra input::placeholder{color:var(--humo)}
+.campo-palabra input:focus{outline:none;border-color:var(--brasa);background:var(--carbon)}
+
+/* la nube de la mesa */
+.nube{
+  display:flex;flex-wrap:wrap;gap:9px;justify-content:center;
+  margin-top:22px;
+}
+.pal{
+  font-family:var(--f-plato);font-weight:400;
+  padding:7px 15px;border-radius:var(--r-pill);
+  background:var(--carbon-2);border:1px solid var(--linea);
+  color:var(--ceniza);
+  animation:aparecer .5s cubic-bezier(.2,.9,.3,1) backwards;
+}
+.pal.mia{
+  background:rgba(233,84,29,.18);border-color:var(--brasa);color:var(--hueso);
+}
+.pal.eco{color:var(--resina);border-color:rgba(232,177,92,.34);background:rgba(232,177,92,.09)}
+.pal .n{font-family:var(--f-dato);font-size:11px;opacity:.6;margin-left:6px}
+@keyframes aparecer{from{opacity:0;transform:translateY(7px) scale(.94)}to{opacity:1;transform:none}}
+.nube-pie{
+  text-align:center;font-size:12.5px;color:var(--humo);margin-top:14px;
+}
+
+/* ============================================================ EL PULSO */
+.pulso{margin-top:14px}
+.pulso-riel{
+  position:relative;height:56px;border-radius:var(--r-pill);
+  background:linear-gradient(90deg, var(--carbon-2), rgba(233,84,29,.32));
+  border:1px solid var(--linea);overflow:hidden;touch-action:none;cursor:pointer;
+}
+.pulso-lleno{
+  position:absolute;left:0;top:0;bottom:0;
+  background:linear-gradient(90deg, rgba(232,177,92,.30), var(--brasa));
+  transition:width .12s linear;
+}
+.pulso-perilla{
+  position:absolute;top:50%;width:38px;height:38px;border-radius:50%;
+  transform:translate(-50%,-50%);background:var(--hueso);
+  box-shadow:0 4px 16px rgba(0,0,0,.6);transition:left .12s linear;
+  display:grid;place-items:center;
+}
+.pulso-perilla i{width:11px;height:11px;border-radius:50%;background:var(--brasa);display:block}
+.pulso-extremos{
+  display:flex;justify-content:space-between;margin-top:9px;
+  font-family:var(--f-dato);font-size:11.5px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--humo);
+}
+.pulso-lectura{
+  text-align:center;font-family:var(--f-plato);font-size:21px;
+  margin-top:14px;color:var(--resina);min-height:30px;
+}
+
+/* ============================================================ vela */
+body.velando .apagable{opacity:.06;transition:opacity 1.4s ease}
+body:not(.velando) .apagable{transition:opacity .3s ease}
+.vela-aviso{
+  position:fixed;left:0;right:0;bottom:0;z-index:6;
+  display:none;flex-direction:column;align-items:center;gap:10px;
+  padding:0 22px 44px;pointer-events:none;
+}
+body.velando .vela-aviso{display:flex}
+.vela-aviso .ascua{
+  width:8px;height:8px;border-radius:50%;background:var(--brasa);
+  box-shadow:0 0 18px 5px rgba(233,84,29,.6);
+  animation:latir 3.4s ease-in-out infinite;
+}
+@keyframes latir{0%,100%{opacity:.45;transform:scale(.85)}50%{opacity:1;transform:scale(1.12)}}
+.vela-aviso .qsuena{
+  font-family:var(--f-plato);font-size:19px;color:var(--ceniza);text-align:center;
+}
+.vela-aviso .tocar{
+  font-family:var(--f-dato);font-size:11px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--humo);
+}
+
+/* ============================================================ barra baja */
+.barra{
+  position:fixed;left:0;right:0;bottom:0;z-index:5;
+  background:linear-gradient(to top, var(--noche) 62%, rgba(8,9,11,0));
+  padding:22px 22px calc(18px + env(safe-area-inset-bottom));
+  display:flex;justify-content:center;
+}
+.barra .adentro{width:100%;max-width:560px;display:flex;gap:10px;align-items:center}
+body.velando .barra{opacity:.06;transition:opacity 1.4s ease}
+
+/* ============================================================ hitos / antes */
+.cuenta{
+  font-family:var(--f-titulo);font-weight:800;
+  font-size:clamp(52px,16vw,76px);line-height:.85;
+  font-variant-numeric:tabular-nums;letter-spacing:.01em;
+}
+.cuenta small{
+  display:block;font-family:var(--f-dato);font-size:11px;font-weight:400;
+  letter-spacing:.26em;text-transform:uppercase;color:var(--humo);margin-top:12px;
+}
+.dl{display:flex;flex-direction:column;gap:0}
+.dl .par{
+  display:flex;justify-content:space-between;gap:16px;align-items:baseline;
+  padding:14px 0;border-bottom:1px solid var(--linea-suave);
+}
+.dl .par:last-child{border-bottom:none}
+.dl .k{
+  font-family:var(--f-titulo);font-weight:700;font-size:11.5px;
+  letter-spacing:.2em;text-transform:uppercase;color:var(--humo);flex:0 0 auto;
+}
+.dl .v{text-align:right;font-size:15.5px}
+.dl .v a{color:var(--resina);text-decoration:none;border-bottom:1px solid rgba(232,177,92,.4)}
+
+/* ============================================================ después */
+.recuerdo-paso{
+  padding:20px 0;border-bottom:1px solid var(--linea-suave);
+}
+.recuerdo-paso:last-of-type{border-bottom:none}
+.recuerdo-paso .cab{display:flex;align-items:baseline;gap:12px}
+.recuerdo-paso .nn{
+  font-family:var(--f-titulo);font-weight:800;font-size:24px;color:var(--brasa);
+  font-variant-numeric:tabular-nums;flex:0 0 auto;
+}
+.recuerdo-paso .pl{font-family:var(--f-plato);font-weight:300;font-size:21px;line-height:1.2}
+.recuerdo-paso .ex{font-size:13.5px;color:var(--resina);margin-top:6px;font-family:var(--f-dato)}
+.album{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:7px;margin-top:14px;
+}
+.album img{
+  width:100%;aspect-ratio:1;object-fit:cover;border-radius:10px;
+  border:1px solid var(--linea);display:block;background:var(--carbon-2);
+}
+.album .sumar{
+  aspect-ratio:1;border-radius:10px;border:1px dashed var(--linea);
+  display:grid;place-items:center;color:var(--humo);background:var(--carbon-2);
+}
+.album .sumar svg{width:20px;height:20px;stroke-width:1.6}
+
+/* ============================================================ hoja modal */
+.velo{
+  position:fixed;inset:0;z-index:60;background:rgba(4,5,7,.78);
+  backdrop-filter:blur(6px);display:grid;place-items:end center;
+}
+.velo[hidden]{display:none!important}
+.hojita{
+  width:100%;max-width:560px;background:var(--carbon);
+  border:1px solid var(--linea);border-bottom:none;
+  border-radius:var(--r-lg) var(--r-lg) 0 0;
+  max-height:92vh;display:flex;flex-direction:column;
+  animation:subir .24s cubic-bezier(.2,.9,.3,1);
+  padding-bottom:env(safe-area-inset-bottom);
+}
+@keyframes subir{from{transform:translateY(22px);opacity:0}to{transform:none;opacity:1}}
+@media (min-width:640px){
+  .velo{place-items:center;padding:24px}
+  .hojita{border-radius:var(--r-lg);border-bottom:1px solid var(--linea);max-height:86vh}
+}
+.hojita-cab{
+  display:flex;align-items:center;gap:12px;padding:18px 22px;
+  border-bottom:1px solid var(--linea-suave);
+}
+.hojita-cab h3{
+  font-family:var(--f-titulo);font-weight:800;font-size:21px;
+  letter-spacing:.08em;text-transform:uppercase;flex:1 1 auto;
+}
+.hojita-cue{padding:22px;overflow-y:auto;display:flex;flex-direction:column;gap:18px}
+.hojita-pie{display:flex;gap:10px;padding:16px 22px;border-top:1px solid var(--linea-suave)}
+.ico{
+  width:38px;height:38px;border-radius:50%;display:grid;place-items:center;
+  color:var(--ceniza);background:var(--carbon-2);flex:0 0 38px;
+}
+.ico svg{width:18px;height:18px;stroke-width:1.9}
+
+.campo{display:flex;flex-direction:column;gap:7px}
+.campo label{
+  font-family:var(--f-titulo);font-weight:700;font-size:11.5px;
+  letter-spacing:.2em;text-transform:uppercase;color:var(--humo);
+}
+.campo .pista{font-size:12.5px;color:var(--humo);line-height:1.45}
+.ent{
+  background:var(--carbon-2);border:1px solid var(--linea);border-radius:var(--r);
+  padding:13px 15px;font-size:16px;width:100%;
+}
+.ent:focus{outline:none;border-color:var(--brasa);background:var(--noche)}
+textarea.ent{resize:vertical;min-height:76px;line-height:1.5}
+.opciones{display:flex;flex-wrap:wrap;gap:8px}
+.op{
+  padding:10px 16px;border-radius:var(--r-pill);border:1px solid var(--linea);
+  background:var(--carbon-2);font-size:14.5px;
+}
+.op[aria-pressed="true"]{background:var(--brasa);border-color:var(--brasa);color:#fff;font-weight:600}
+
+/* lista de la mesa */
+.quien-lista{display:flex;flex-direction:column;gap:8px}
+.quien{
+  display:flex;align-items:center;gap:13px;width:100%;text-align:left;
+  padding:13px 16px;border-radius:var(--r);
+  border:1px solid var(--linea);background:var(--carbon-2);
+}
+.quien:active{border-color:var(--brasa)}
+.quien .cu{
+  width:38px;height:38px;flex:0 0 38px;border-radius:50%;
+  display:grid;place-items:center;background:var(--carbon);
+  font-family:var(--f-titulo);font-weight:800;font-size:14px;
+  color:var(--ceniza);border:1px solid var(--linea);
+}
+.quien .nm{font-size:15.5px;font-weight:500}
+.quien .sb{font-size:12.5px;color:var(--humo);margin-top:1px}
+.quien.tomado{opacity:.42}
+.quien.tomado .sb{color:var(--brasa)}
+
+/* anfitrión */
+.anf-mesa{display:grid;grid-template-columns:repeat(auto-fill,minmax(76px,1fr));gap:9px}
+.anf-p{
+  border-radius:var(--r);padding:10px 6px;text-align:center;
+  background:var(--carbon-2);border:1px solid var(--linea);
+}
+.anf-p .nn{font-size:12.5px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.anf-p .bar{height:5px;border-radius:3px;background:var(--linea);margin-top:7px;overflow:hidden}
+.anf-p .bar i{display:block;height:100%;background:var(--brasa);border-radius:3px}
+.anf-p.pide{border-color:var(--alerta);background:rgba(222,49,38,.16)}
+.anf-p .pd{font-family:var(--f-dato);font-size:10px;color:var(--alerta);margin-top:5px}
+
+#aviso{
+  position:fixed;left:50%;bottom:96px;transform:translate(-50%,12px);
+  z-index:80;background:var(--hueso);color:var(--noche);
+  padding:11px 20px;border-radius:var(--r-pill);font-size:14.5px;font-weight:600;
+  box-shadow:0 12px 34px rgba(0,0,0,.6);opacity:0;pointer-events:none;
+  transition:opacity .2s,transform .2s;max-width:88vw;text-align:center;
+}
+#aviso.on{opacity:1;transform:translate(-50%,0)}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
+</style>
+
+<div class="brasa-fondo" aria-hidden="true"></div>
+<header class="marca" id="marca">
+  <span class="sello" id="sello"></span>
+  <span class="nombre" id="nombreMarca">Sticky Knife</span>
+  <span class="bajo" id="bajoMarca">Sabores y terpenos</span>
+</header>
+<main class="hoja" id="vista"></main>
+<div class="barra" id="barra" hidden><div class="adentro" id="barraDentro"></div></div>
+
+<div class="vela-aviso" aria-hidden="true">
+  <span class="ascua"></span>
+  <span class="qsuena" id="velaQ"></span>
+  <span class="tocar">tocá para volver</span>
+</div>
+
+<div class="velo" id="velo" hidden></div>
+<div id="aviso" role="status" aria-live="polite"></div>
+
+<script>
+/* ============================================================
+   LA NOCHE · Sticky Knife
+   Sabores y terpenos — Buenos Aires
+   ============================================================ */
+(function(){
+"use strict";
+
+const $  = (s,r)=>(r||document).querySelector(s);
+const $$ = (s,r)=>Array.from((r||document).querySelectorAll(s));
+const uid=p=>(p||"x")+"-"+Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
+
+/* Marca provisional: misma composición que el logo real —
+   círculo naranja, lettering rojo, hoja crema en diagonal,
+   cogollos verdes. Se reemplaza subiendo el archivo. */
+const SELLO = '<svg viewBox="0 0 100 100" role="img" aria-label="Sticky Knife">'
+ + '<circle cx="50" cy="50" r="50" fill="var(--brasa)"/>'
+ + '<g stroke="#141414" stroke-width="3.4" stroke-linejoin="round">'
+ +   '<path d="M78 20 L36 62 L26 80 L44 70 L86 28 Z" fill="#F0E9D6"/>'
+ +   '<path d="M78 20 L86 28 L93 21 a5.6 5.6 0 0 0-8-8 Z" fill="#8A241A"/>'
+ +   '<g fill="#3E5C2C">'
+ +     '<circle cx="26" cy="72" r="11"/><circle cx="42" cy="80" r="8"/>'
+ +     '<circle cx="58" cy="56" r="8.5"/><circle cx="70" cy="46" r="6"/>'
+ +   '</g>'
+ + '</g></svg>';
+
+const I={
+  camara:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5A1.5 1.5 0 0 1 4.5 7h2.2l1.3-2h7l1.3 2h2.2A1.5 1.5 0 0 1 20 8.5v9A1.5 1.5 0 0 1 18.5 19h-13A1.5 1.5 0 0 1 4 17.5z"/><circle cx="12" cy="13" r="3.4"/></svg>',
+  mas:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>',
+  equis:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+  mano:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M8 11V5.6a1.6 1.6 0 0 1 3.2 0V11"/><path d="M11.2 10.6V4.4a1.6 1.6 0 0 1 3.2 0v6.2"/><path d="M14.4 11V6.8a1.6 1.6 0 0 1 3.2 0V14a6.4 6.4 0 0 1-6.4 6.4h-.6A5.8 5.8 0 0 1 4.8 14.6l-.5-1.9a1.5 1.5 0 0 1 2.6-1.4L8 12.8"/></svg>',
+  atras:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>',
+  ade:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>',
+  mapa:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.3 7-11a7 7 0 1 0-14 0c0 4.7 7 11 7 11z"/><circle cx="12" cy="10" r="2.6"/></svg>'
+};
+
+/* ============================================================ LA CENA */
+const CENA={
+  numero:"08", nombre:"Primavera en Vivo",
+  fecha:"2026-09-26", hora:"20:30",
+  lugar:"Loft en Villa Crespo", zona:"Buenos Aires",
+  direccion:"Te la mandamos por privado 24 h antes",
+  puerta:"20:15", cupos:10,
+  traer:"Vení con hambre y sin haber almorzado pesado. Si tomás alguna medicación, avisanos antes.",
+  cierre:"La próxima es la 09 · Hachís Tradicional, en octubre. Los que estuvieron esta noche entran primero."
+};
+
+const PASOS=[
+ {n:1, plato:"Escabeche de mejillones, hinojo y limón",
+  desc:"Frío, ácido y salino. Abre la boca y la deja lista para todo lo que viene.",
+  extracto:"Papaya Cake", tipo:"Hash rosin", micras:"90µ", temp:195,
+  terps:"limoneno · pineno", productor:"Solventless AR", origen:"Escobar, Buenos Aires",
+  ritual:["Esperá a que el banger baje a <em>195°</em>. Si está humeando, todavía está muy caliente.",
+          "Inhalá suave y largo, como si olieras algo. Fuerte no sirve: quema el terpeno.",
+          "Soltá, contá hasta dos, y recién ahí el primer mejillón."],
+  sugeridas:["cítrico","pino","cáscara de lima","fresco","mar"]},
+
+ {n:2, plato:"Sopa fría de arvejas, menta y burrata",
+  desc:"Verde y láctea. El mentol del extracto y el de la menta se buscan.",
+  extracto:"Mint Chip", tipo:"Static sift", micras:"—", temp:180,
+  terps:"mentol · cariofileno", productor:"Casa Tandil", origen:"Tandil, Buenos Aires",
+  ritual:["Bajá a <em>180°</em>. Es el paso más frío de la noche, a propósito.",
+          "Media inhalación nada más. Este querés sentirlo en la nariz, no en el pecho.",
+          "Tomá la sopa mientras te dura el frío en la boca."],
+  sugeridas:["menta","frío","eucalipto","limpio","pasto mojado"]},
+
+ {n:3, plato:"Provoleta ahumada con miel de romero",
+  desc:"El paso que todos se acuerdan. Grasa, humo y dulce al mismo tiempo.",
+  extracto:"Sherbhead", tipo:"Live rosin", micras:"73-90µ", temp:200,
+  terps:"limoneno · linalol", productor:"Jehiel", origen:"Prensado en casa",
+  ritual:["<em>200°</em>. Acá sí queremos cuerpo, no sólo aroma.",
+          "Inhalación entera y tranquila. Este aguanta.",
+          "Mordé la provoleta todavía caliente, con el humo adentro. Ese es el truco."],
+  sugeridas:["dulce","flores","caramelo","humo","la casa de mi abuela"]},
+
+ {n:4, plato:"Ojo de bife madurado 21 días, chimichurri de hierbas frescas",
+  desc:"Lo más pesado de la noche. Necesita un extracto que no se deje tapar.",
+  extracto:"GMO Cookies", tipo:"Live resin", micras:"—", temp:215,
+  terps:"cariofileno · humuleno", productor:"Norte Extracts", origen:"Salta",
+  ritual:["Subí a <em>215°</em>. Es el más alto de la noche.",
+          "Va a picar un poco. Es el cariofileno, y es lo que aguanta la carne madurada.",
+          "Comé primero un bocado de carne, después inhalá. Este paso va al revés."],
+  sugeridas:["ajo","tierra","cuero","pimienta","oscuro"]},
+
+ {n:5, plato:"Quesos de cabra de Tandil con membrillo casero",
+  desc:"El respiro antes del postre. Frutal y redondo.",
+  extracto:"Zkittlez", tipo:"Bubble hash", micras:"73µ", temp:190,
+  terps:"mirceno · linalol", productor:"Casa Tandil", origen:"Tandil, Buenos Aires",
+  ritual:["<em>190°</em>, tranquilo.",
+          "Este es para compartir: pasalo, que cada uno haga lo suyo.",
+          "Alterná queso y membrillo entre inhalación e inhalación."],
+  sugeridas:["frutal","mango","golosina","redondo","tarde de verano"]},
+
+ {n:6, plato:"Helado de dulce de leche quemado y aceite de oliva",
+  desc:"Cerramos con el mismo extracto del primer paso, curado en frío. Misma planta, otra persona.",
+  extracto:"Papaya Cake", tipo:"Rosin cold cure", micras:"90µ", temp:185,
+  terps:"limoneno · nerolidol", productor:"Solventless AR", origen:"Escobar, Buenos Aires",
+  ritual:["<em>185°</em>. Bajo, para que salga la manteca.",
+          "Acordate del paso 1 mientras inhalás. Es la misma planta.",
+          "Última. Sin apuro."],
+  sugeridas:["manteca","vainilla","tostado","volver al principio","abrazo"]}
+];
+
+/* La mesa de ejemplo. Los nombres son inventados. */
+const MESA=[
+ {cupo:1,nombre:"Male Ferrari"},{cupo:2,nombre:"Tomás Iriarte"},
+ {cupo:3,nombre:"Flor Aguirre"},{cupo:4,nombre:"Caro Benítez"},
+ {cupo:5,nombre:"Juli Paz"},   {cupo:6,nombre:"Lucas Vidal"},
+ {cupo:7,nombre:"Nacho Duarte"},{cupo:8,nombre:"Dani Salgado"},
+ {cupo:9,nombre:"Cupo libre"}, {cupo:10,nombre:"Cupo libre"}
+];
+
+/* Palabras de una mesa simulada, para que se entienda el gesto
+   aunque estés solo probando. Se marcan como tales. */
+const SIMULADAS={
+ 1:[["Tomás","cáscara de lima"],["Flor","mar"],["Caro","fresco"],["Juli","cítrico"],["Lucas","pino"],["Nacho","cítrico"]],
+ 2:[["Male","frío"],["Caro","eucalipto"],["Lucas","pasto mojado"],["Dani","menta"],["Juli","menta"]],
+ 3:[["Male","la casa de mi abuela"],["Tomás","humo"],["Flor","caramelo"],["Nacho","humo"],["Dani","dulce"],["Lucas","fogón"]],
+ 4:[["Tomás","cuero"],["Lucas","ajo"],["Nacho","oscuro"],["Caro","pimienta"],["Male","tierra"]],
+ 5:[["Flor","mango"],["Juli","golosina"],["Dani","tarde de verano"],["Male","frutal"],["Caro","frutal"]],
+ 6:[["Nacho","abrazo"],["Male","volver al principio"],["Tomás","manteca"],["Flor","tostado"],["Juli","vainilla"],["Dani","abrazo"]]
+};
+
+/* Una palabra = un chip, aunque la digan cinco. Ordenadas por eco. */
+function agrupar(lista){
+  const g={};
+  lista.forEach(x=>{
+    const k=String(x.palabra||"").toLowerCase().trim(); if(!k) return;
+    if(!g[k]) g[k]={palabra:x.palabra,n:0,mia:false,quienes:[]};
+    g[k].n++; g[k].quienes.push(x.nombre);
+    if(S.yo&&x.cupo===S.yo.cupo) g[k].mia=true;
+  });
+  return Object.keys(g).map(k=>g[k]).sort((a,b)=>b.n-a.n||a.palabra.localeCompare(b.palabra,"es"));
+}
+
+const PULSO_TXT=[
+ [0,  "Entero. Recién arrancás."],
+ [22, "Livianito. Todo en orden."],
+ [42, "Ahí va. Justo en el punto."],
+ [62, "Volado y contento."],
+ [80, "Bastante alto. Tomá agua."],
+ [92, "Muy alto. Frená un poco, no pasa nada."]
+];
+function textoPulso(v){ let t=PULSO_TXT[0][1]; PULSO_TXT.forEach(([u,x])=>{ if(v>=u) t=x; }); return t; }
+
+/* ============================================================ estado */
+let S={
+  fase:"curso",        // antes | curso | despues
+  paso:3,              // 0 = todavía no arrancó
+  yo:null,             // {cupo, nombre}
+  palabras:[],         // {id,pasoN,cupo,nombre,palabra}
+  pulso:{},            // cupo -> {cupo,nombre,valor,ayuda}
+  fotos:[],            // {id,pasoN,url,nombre}
+  logoUrl:"",
+  simulado:true,
+  verPaso:null         // si el comensal se va a mirar otro paso
+};
+let DB=null, ASSETS=null, listos=false;
+const LS="stickyknife.noche.v1";
+const LS_YO="stickyknife.noche.yo";
+
+function guardar(){
+  try{ localStorage.setItem(LS, JSON.stringify({fase:S.fase,paso:S.paso,palabras:S.palabras,pulso:S.pulso,fotos:S.fotos,logoUrl:S.logoUrl})); }catch(e){}
+  try{ if(S.yo) localStorage.setItem(LS_YO, JSON.stringify(S.yo)); }catch(e){}
+}
+function leer(){
+  try{
+    const y=localStorage.getItem(LS_YO); if(y) S.yo=JSON.parse(y);
+    const r=localStorage.getItem(LS); if(!r) return;
+    const o=JSON.parse(r)||{};
+    if(o.fase) S.fase=o.fase;
+    if(typeof o.paso==="number") S.paso=o.paso;
+    if(Array.isArray(o.palabras)) S.palabras=o.palabras;
+    if(o.pulso&&typeof o.pulso==="object") S.pulso=o.pulso;
+    if(Array.isArray(o.fotos)) S.fotos=o.fotos;
+    if(o.logoUrl) S.logoUrl=o.logoUrl;
+  }catch(e){}
+}
+
+const paso = n => PASOS.find(p=>p.n===n) || null;
+const pasoActual = ()=> paso(S.verPaso || S.paso);
+const misPalabras = n => S.palabras.filter(p=>p.pasoN===n && S.yo && p.cupo===S.yo.cupo);
+function palabrasDe(n){
+  const reales=S.palabras.filter(p=>p.pasoN===n);
+  if(reales.length>=3) return reales;          // la mesa real ya habla sola
+  const faltan=Math.max(0,6-reales.length);
+  const sim=(SIMULADAS[n]||[]).slice(0,faltan)
+            .map(([nom,pal],i)=>({id:"sim"+n+i,pasoN:n,cupo:100+i,nombre:nom,palabra:pal,sim:true}));
+  return reales.concat(sim);
+}
+
+/* ============================================================ nube */
+async function conectar(){
+  if(!window.claude||!window.claude.use) return;
+  let db=null; try{ db=await window.claude.use("db"); }catch(e){}
+  if(!db) return;
+  DB=db; S.simulado=false;
+  try{ ASSETS=await window.claude.use("assets"); }catch(e){ ASSETS=null; }
+
+  DB.doc("noche/estado").onSnapshot(s=>{
+    if(!s.exists) return;
+    const d=s.data()||{};
+    if(d.fase) S.fase=d.fase;
+    if(typeof d.paso==="number") S.paso=d.paso;
+    if(d.logoUrl!=null) S.logoUrl=d.logoUrl;
+    S.verPaso=null; guardar(); pintar();
+  }, err);
+  DB.collection("palabras").onSnapshot(s=>{
+    S.palabras=s.docs.map(x=>Object.assign({id:x.id},x.data()||{})); guardar(); pintar();
+  }, err);
+  DB.collection("pulso").onSnapshot(s=>{
+    S.pulso={}; s.docs.forEach(x=>{ S.pulso[x.id]=Object.assign({},x.data()||{}); }); pintar();
+  }, err);
+  DB.collection("fotos").onSnapshot(s=>{
+    S.fotos=s.docs.map(x=>Object.assign({id:x.id},x.data()||{})); guardar(); pintar();
+  }, err);
+  pintar();
+}
+function err(e){
+  const c=e&&e.code;
+  if(c==="revoked"){ DB=null; S.simulado=true; aviso("Se cortó la conexión. Seguís viendo la noche."); }
+  else if(c==="quota_exceeded") aviso("No entra más. Avisale al anfitrión.");
+  else if(c==="resource_exhausted") aviso("Esperá un segundo y probá de nuevo.");
+}
+async function nube(col,id,datos){
+  if(!DB) return;
+  try{ await DB.doc(col+"/"+id).set(datos); }catch(e){ err(e); }
+}
+async function estadoNube(patch){
+  Object.assign(S,patch); guardar(); pintar();
+  if(DB){ try{ await DB.doc("noche/estado").set({fase:S.fase,paso:S.paso,logoUrl:S.logoUrl}); }catch(e){ err(e); } }
+}
+
+/* ============================================================ PINTAR */
+function pintar(){
+  const act=document.activeElement;
+  const foco=act&&act.id&&$("#vista").contains(act)?act.id:null;
+  const sel=foco&&act.selectionStart!=null?[act.selectionStart,act.selectionEnd]:null;
+
+  $("#sello").innerHTML = S.logoUrl ? '<img src="'+esc(S.logoUrl)+'" alt="Sticky Knife">' : SELLO;
+
+  let v;
+  if(!S.yo) v=vistaQuien();
+  else if(S.fase==="antes") v=vistaAntes();
+  else if(S.fase==="despues") v=vistaDespues();
+  else if(S.paso===0) v=vistaEspera();
+  else v=vistaPaso();
+
+  $("#marca").classList.toggle("chica", !!v.chica);
+  $("#vista").innerHTML=v.html;
+  const b=$("#barra");
+  b.hidden=!v.barra;
+  $("#barraDentro").innerHTML=v.barra||"";
+
+  const p=pasoActual();
+  $("#velaQ").textContent = (S.fase==="curso"&&p) ? p.extracto : "";
+
+  if(foco){ const el=$("#"+foco); if(el&&el.focus){ el.focus(); if(sel&&el.setSelectionRange){try{el.setSelectionRange(sel[0],sel[1]);}catch(e){}} } }
+}
+
+/* ------------------------------------------------- ¿quién sos? */
+function vistaQuien(){
+  const tomados={}; S.palabras.forEach(p=>{ if(!p.sim) tomados[p.cupo]=p.nombre; });
+  return {chica:false, html:
+    '<div class="pila centro" style="margin-top:26px">'
+    + '<h1 class="pregunta">Bienvenido a la mesa</h1>'
+    + '<p style="color:var(--ceniza);font-size:15.5px">Decinos quién sos así tus palabras quedan con tu nombre.</p>'
+    + '<hr class="regla-brasa" style="margin:6px 0">'
+    + '<div class="quien-lista" style="text-align:left">'
+    + MESA.filter(m=>m.nombre!=="Cupo libre").map(m=>
+        '<button class="quien'+(tomados[m.cupo]?" tomado":"")+'" data-act="soy" data-cupo="'+m.cupo+'" data-nombre="'+esc(m.nombre)+'">'
+        + '<span class="cu">'+m.cupo+'</span>'
+        + '<span><span class="nm">'+esc(m.nombre)+'</span>'
+        + '<span class="sb">'+(tomados[m.cupo]?"ya está en la mesa":"cupo "+m.cupo)+'</span></span></button>').join("")
+    + '</div>'
+    + '<button class="bt plano" data-act="soy-otro" style="margin-top:4px">No estoy en la lista</button>'
+    + '</div>'};
+}
+
+/* ------------------------------------------------- antes */
+function vistaAntes(){
+  const cuando=new Date(CENA.fecha+"T"+CENA.hora+":00");
+  const faltan=Math.max(0,Math.ceil((cuando-new Date())/86400000));
+  const mio=MESA.find(m=>S.yo&&m.cupo===S.yo.cupo);
+  return {chica:false, html:
+    '<div class="pila centro" style="margin-top:20px">'
+    + '<div class="rotulo">Cena '+CENA.numero+' · '+esc(CENA.nombre)+'</div>'
+    + '<div class="cuenta">'+faltan+'<small>'+(faltan===1?"día":"días")+' para la mesa</small></div>'
+    + '</div>'
+    + '<div class="tarjeta" style="margin-top:28px"><div class="dl">'
+    + par("Cuándo",'sábado 26 de septiembre')
+    + par("Puerta",'<span class="dato">'+esc(CENA.puerta)+'</span> — arrancamos <span class="dato">'+esc(CENA.hora)+'</span> en punto')
+    + par("Dónde",esc(CENA.lugar)+'<br><span style="color:var(--humo);font-size:13px">'+esc(CENA.direccion)+'</span>')
+    + par("Mesa",'sos el cupo <span class="dato">'+(S.yo?S.yo.cupo:"—")+'</span> de '+CENA.cupos)
+    + '</div></div>'
+    + '<div class="tarjeta tenue" style="margin-top:14px">'
+    + '<div class="rotulo" style="margin-bottom:9px">Cómo venir</div>'
+    + '<p style="font-size:15.5px;line-height:1.6">'+esc(CENA.traer)+'</p></div>'
+    + '<div class="tarjeta" style="margin-top:14px">'
+    + '<div class="rotulo" style="margin-bottom:9px">Lo que comés</div>'
+    + '<p style="font-size:15.5px;color:var(--ceniza);line-height:1.6;margin-bottom:14px">'
+    + 'Contanos si hay algo que no comés o alguna alergia. Lo vemos nosotros y armamos tu menú aparte.</p>'
+    + '<button class="bt ancho" data-act="restricciones">'
+    + (mio&&mio.restricciones?"Ya cargaste: "+esc(mio.restricciones):"Cargar mis restricciones")+'</button></div>'
+    + '<p class="centro" style="color:var(--humo);font-size:13px;margin-top:26px">'
+    + 'Guardá este link. La noche de la cena cambia solo.</p>'};
+}
+function par(k,v){ return '<div class="par"><span class="k">'+esc(k)+'</span><span class="v">'+v+'</span></div>'; }
+
+/* ------------------------------------------------- todavía no arrancó */
+function vistaEspera(){
+  return {chica:false, html:
+    '<div class="pila centro" style="margin-top:44px">'
+    + '<h1 class="pregunta">Ya estás en la mesa</h1>'
+    + '<p style="color:var(--ceniza)">Cuando salga el primer paso, esta pantalla cambia sola.<br>Dejá el teléfono apoyado.</p>'
+    + '<div style="margin:30px auto 0"><span class="ascua" style="display:block;width:10px;height:10px;border-radius:50%;background:var(--brasa);box-shadow:0 0 22px 7px rgba(233,84,29,.55)"></span></div>'
+    + '</div>'};
+}
+
+/* ------------------------------------------------- EL PASO */
+function vistaPaso(){
+  const p=pasoActual(); if(!p) return vistaEspera();
+  const mirando = S.verPaso && S.verPaso!==S.paso;
+  const mias=misPalabras(p.n);
+  const todas=palabrasDe(p.n);
+
+  let h="";
+
+  if(mirando){
+    h+='<div class="tarjeta tenue" style="margin-bottom:18px;display:flex;align-items:center;gap:12px;padding:13px 16px">'
+     + '<span style="flex:1 1 auto;font-size:14px;color:var(--ceniza)">Estás mirando un paso anterior.</span>'
+     + '<button class="bt chico pri" data-act="volver-actual">Volver al '+S.paso+'</button></div>';
+  }
+
+  h+='<div class="apagable">';
+
+  /* --- cabecera --- */
+  h+='<div class="paso-cab"><span class="paso-n">'+String(p.n).padStart(2,"0")+'</span>'
+   + '<span class="paso-de">paso '+p.n+'<br>de '+PASOS.length+'</span></div>'
+   + '<h1 class="plato">'+esc(p.plato)+'</h1>'
+   + '<p class="plato-desc">'+esc(p.desc)+'</p>';
+
+  /* --- el extracto --- */
+  h+='<div class="extracto"><div class="qva">Lo que va con esto</div>'
+   + '<div class="nom">'+esc(p.extracto)+'</div>'
+   + '<div class="fic">'
+   + '<span class="chip-dato">'+esc(p.tipo)+'</span>'
+   + (p.micras&&p.micras!=="—"?'<span class="chip-dato">'+esc(p.micras)+'</span>':'')
+   + '<span class="chip-dato">'+p.temp+'&nbsp;°C</span>'
+   + '<span class="chip-dato">'+esc(p.terps)+'</span></div>'
+   + '<div class="quien">Lo hizo <b>'+esc(p.productor)+'</b> · '+esc(p.origen)+'</div></div>';
+
+  /* --- el ritual --- */
+  h+='<div class="ritual"><div class="rotulo">Cómo se toma</div><ol>'
+   + p.ritual.map((t,i)=>'<li><span class="paso-i">'+(i+1)+'</span><span class="txt">'+t+'</span></li>').join("")
+   + '</ol></div>';
+
+  /* --- una palabra --- */
+  h+='<div class="palabra-zona"><hr class="regla-brasa"><div style="height:24px"></div>';
+  if(!mias.length){
+    h+='<h2 class="pregunta">¿A qué te sabe?</h2>'
+     + '<p class="centro" style="color:var(--humo);font-size:13.5px;margin-top:8px">Una palabra. Tocá una o escribí la tuya.</p>'
+     + '<div class="sugeridas">'
+     + p.sugeridas.map(w=>'<button class="sug" data-act="sug" data-w="'+esc(w)+'">'+esc(w)+'</button>').join("")
+     + '</div>'
+     + '<div class="campo-palabra">'
+     + '<input id="miPalabra" type="text" maxlength="28" autocomplete="off" placeholder="la tuya…" aria-label="Tu palabra para este paso">'
+     + '<button class="bt pri" data-act="decir" style="min-height:auto;padding:14px 22px">Sumar</button></div>';
+  }else{
+    h+='<h2 class="pregunta" style="font-size:22px">Lo que dijo la mesa</h2>';
+  }
+
+  if(todas.length){
+    h+='<div class="nube">'+agrupar(todas).map((g,i)=>{
+      const cls=g.mia?"mia":(g.n>1?"eco":"");
+      const tam=g.n>2?22:g.n>1?19:17;
+      return '<span class="pal '+cls+'" style="animation-delay:'+(i*45)+'ms;font-size:'+tam+'px" '
+        + 'title="'+esc(g.quienes.join(", "))+'">'+esc(g.palabra)+(g.n>1?'<span class="n">×'+g.n+'</span>':'')+'</span>';
+    }).join("")+'</div>';
+    h+='<p class="nube-pie">'+todas.length+' de la mesa ya dijeron la suya'
+      + (mias.length?' · <button class="bt plano chico" data-act="cambiar" style="min-height:auto;padding:2px 8px;text-decoration:underline">cambiar la mía</button>':'')
+      + (todas.some(x=>x.sim)?'<br><span style="opacity:.6">algunas son de una mesa de ejemplo — se van solas cuando habla la mesa real</span>':'')
+      + '</p>';
+  }
+  h+='</div>';
+
+  /* --- el pulso --- */
+  const mio=S.yo?(S.pulso[S.yo.cupo]||null):null;
+  const val=mio?clamp(Number(mio.valor)||0,0,100):null;
+  h+='<div class="palabra-zona"><hr class="regla-brasa"><div style="height:24px"></div>'
+   + '<h2 class="pregunta" style="font-size:22px">¿Cómo venís?</h2>'
+   + '<p class="centro" style="color:var(--humo);font-size:13.5px;margin-top:8px">Sólo lo vemos nosotros, para saber cómo seguir.</p>'
+   + '<div class="pulso"><div class="pulso-riel" id="riel" role="slider" tabindex="0" '
+   + 'aria-label="Cómo venís" aria-valuemin="0" aria-valuemax="100" aria-valuenow="'+(val==null?50:val)+'">'
+   + '<span class="pulso-lleno" style="width:'+(val==null?0:val)+'%"></span>'
+   + '<span class="pulso-perilla" style="left:'+(val==null?50:val)+'%"><i></i></span></div>'
+   + '<div class="pulso-extremos"><span>liviano</span><span>muy volado</span></div>'
+   + '<div class="pulso-lectura">'+(val==null?'<span style="color:var(--humo);font-size:15px">arrastrá para contarnos</span>':esc(textoPulso(val)))+'</div>'
+   + '</div></div>';
+
+  /* --- fotos --- */
+  const fp=S.fotos.filter(f=>f.pasoN===p.n);
+  h+='<div class="palabra-zona"><hr class="regla-brasa"><div style="height:22px"></div>'
+   + '<div class="rotulo centro">El álbum de la noche</div>'
+   + '<div class="album">'
+   + fp.map(f=>'<img src="'+esc(f.url)+'" alt="Foto de '+esc(f.nombre||"la mesa")+'" loading="lazy">').join("")
+   + '<button class="sumar" data-act="foto" aria-label="Sumar una foto de este paso">'+I.camara+'</button>'
+   + '</div></div>';
+
+  /* --- ir a otros pasos --- */
+  h+='<div class="fila" style="justify-content:center;gap:7px;margin-top:34px">'
+   + PASOS.filter(x=>x.n<=S.paso).map(x=>
+      '<button class="sug" data-act="ver" data-n="'+x.n+'" aria-pressed="'+(x.n===p.n)+'" '
+      + 'style="min-width:44px;padding:9px 0;font-family:var(--f-dato);font-size:14px">'+x.n+'</button>').join("")
+   + '</div>'
+   + '<p class="centro" style="color:var(--humo);font-size:12.5px;margin-top:10px">los pasos que ya pasaron</p>';
+
+  h+='</div>'; /* /apagable */
+
+  return {chica:true, html:h, barra:
+    '<button class="bt plano" data-act="ayuda" style="flex:1 1 auto">'+I.mano+'Necesito un momento</button>'
+    + '<button class="bt chico" data-act="foto" aria-label="Sacar foto">'+I.camara+'</button>'};
+}
+
+/* ------------------------------------------------- el día después */
+function vistaDespues(){
+  let h='<div class="pila centro" style="margin-top:16px">'
+   + '<div class="rotulo">Cena '+CENA.numero+' · sábado 26 de septiembre</div>'
+   + '<h1 class="plato" style="font-size:clamp(32px,9vw,46px)">'+esc(CENA.nombre)+'</h1>'
+   + '<p style="color:var(--ceniza);font-size:15.5px;max-width:40ch;margin-inline:auto">'
+   + 'Esta mesa pasó una sola vez. Acá queda lo que dijeron entre todos.</p></div>';
+
+  h+='<div style="margin-top:34px">';
+  PASOS.forEach(p=>{
+    const todas=palabrasDe(p.n);
+    const fp=S.fotos.filter(f=>f.pasoN===p.n);
+    h+='<div class="recuerdo-paso"><div class="cab"><span class="nn">'+String(p.n).padStart(2,"0")+'</span>'
+     + '<span class="pl">'+esc(p.plato)+'</span></div>'
+     + '<div class="ex">'+esc(p.extracto)+' · '+esc(p.tipo)+' · '+p.temp+'&nbsp;°C · '+esc(p.productor)+'</div>';
+    if(todas.length){
+      h+='<div class="nube" style="justify-content:flex-start;margin-top:13px">'
+       + agrupar(todas).map(g=>'<span class="pal '+(g.mia?"mia":(g.n>1?"eco":""))+'" style="font-size:15px">'
+           + esc(g.palabra)+(g.n>1?'<span class="n">×'+g.n+'</span>':'')+'</span>').join("")+'</div>';
+    }
+    if(fp.length){
+      h+='<div class="album">'+fp.map(f=>'<img src="'+esc(f.url)+'" alt="" loading="lazy">').join("")+'</div>';
+    }
+    h+='</div>';
+  });
+  h+='</div>';
+
+  /* quién hizo cada extracto — el crédito a los hasheros */
+  const prods={};
+  PASOS.forEach(p=>{ (prods[p.productor]=prods[p.productor]||{origen:p.origen,ex:[]}).ex.push(p.extracto); });
+  h+='<div class="tarjeta" style="margin-top:30px">'
+   + '<div class="rotulo" style="margin-bottom:12px">Quiénes hicieron los extractos</div><div class="dl">'
+   + Object.keys(prods).map(k=>par(k, esc(prods[k].origen)+'<br><span style="color:var(--humo);font-size:13px">'
+       + Array.from(new Set(prods[k].ex)).join(" · ")+'</span>')).join("")
+   + '</div></div>';
+
+  h+='<div class="tarjeta" style="margin-top:14px;border-color:var(--brasa);background:linear-gradient(166deg,rgba(233,84,29,.13),transparent)">'
+   + '<div class="rotulo" style="margin-bottom:9px;color:var(--brasa)">La próxima</div>'
+   + '<p style="font-size:15.5px;line-height:1.6">'+esc(CENA.cierre)+'</p></div>';
+
+  h+='<p class="centro" style="color:var(--humo);font-size:13px;margin-top:28px">Gracias por venir.<br>Sabores y terpenos.</p>';
+  return {chica:true, html:h};
+}
+
+/* ============================================================ avisos y hojas */
+function aviso(t){
+  const a=$("#aviso"); a.textContent=t; a.classList.add("on");
+  clearTimeout(aviso._t); aviso._t=setTimeout(()=>a.classList.remove("on"),3000);
+}
+let alOk=null;
+function hoja(o){
+  const v=$("#velo");
+  v.innerHTML='<div class="hojita" role="dialog" aria-modal="true" aria-label="'+esc(o.titulo)+'">'
+   + '<div class="hojita-cab"><h3>'+esc(o.titulo)+'</h3>'
+   + '<button class="ico" data-act="cerrar" aria-label="Cerrar">'+I.equis+'</button></div>'
+   + '<form class="hojita-cue" id="hojaForm" novalidate>'+o.cuerpo+'</form>'
+   + (o.pie===false?'':'<div class="hojita-pie">'
+      + '<button class="bt" data-act="cerrar" style="flex:1 1 auto">'+esc(o.no||"Cancelar")+'</button>'
+      + '<button class="bt pri" data-act="ok" style="flex:2 1 auto">'+esc(o.si||"Guardar")+'</button></div>')
+   + '</div>';
+  v.hidden=false; alOk=o.onOk||null;
+  if(o.luego) o.luego();
+}
+function cerrar(){ const v=$("#velo"); v.hidden=true; v.innerHTML=""; alOk=null; }
+function campos(){
+  const o={};
+  $$("#hojaForm [name]").forEach(el=>{ o[el.name]=el.value; });
+  $$("#hojaForm .op[aria-pressed=true][data-op]").forEach(b=>{ o[b.dataset.op]=b.dataset.v; });
+  return o;
+}
+
+/* ============================================================ formularios */
+function formRestricciones(){
+  const mio=MESA.find(m=>S.yo&&m.cupo===S.yo.cupo)||{};
+  const comunes=["Vegetariano","Vegano","Sin TACC","Sin lactosa","Frutos secos","Mariscos"];
+  hoja({
+    titulo:"Lo que no comés", si:"Listo",
+    cuerpo:'<p style="color:var(--ceniza);font-size:14.5px;line-height:1.55">'
+      + 'Marcá lo que corresponda o escribilo. Nos llega directo a la cocina.</p>'
+      + '<div class="campo"><label>Lo de siempre</label><div class="opciones">'
+      + comunes.map(c=>'<button type="button" class="op" data-rest="'+esc(c)+'" '
+          + 'aria-pressed="'+((mio.restricciones||"").indexOf(c)>=0)+'">'+esc(c)+'</button>').join("")
+      + '</div></div>'
+      + '<div class="campo"><label>Algo más</label>'
+      + '<textarea class="ent" name="otro" placeholder="Alergias, medicación, lo que sea que tengamos que saber">'
+      + esc(mio.otro||"")+'</textarea>'
+      + '<span class="pista">Si tomás alguna medicación es importante que lo pongas.</span></div>',
+    onOk:()=>{
+      const marcadas=$$("#hojaForm .op[data-rest][aria-pressed=true]").map(b=>b.dataset.rest);
+      const v=campos();
+      const txt=marcadas.concat(v.otro?[v.otro.trim()]:[]).filter(Boolean).join(", ");
+      const m=MESA.find(x=>x.cupo===S.yo.cupo); if(m){ m.restricciones=txt; m.otro=v.otro; }
+      nube("mesa",String(S.yo.cupo),{cupo:S.yo.cupo,nombre:S.yo.nombre,restricciones:txt});
+      aviso(txt?"Anotado. Gracias.":"Listo, sin restricciones.");
+      pintar(); return true;
+    }
+  });
+}
+
+function pedirAyuda(){
+  hoja({
+    titulo:"Un momento", si:"Sí, avisales", no:"Ya estoy bien",
+    cuerpo:'<p style="font-size:16px;line-height:1.6">Le avisamos a la casa, sin que se entere el resto de la mesa.'
+      + ' Alguien se va a acercar tranquilo con agua y algo dulce.</p>'
+      + '<p style="font-size:14.5px;color:var(--ceniza);line-height:1.6">'
+      + 'No pasa nada, es más común de lo que pensás. Respirá despacio y quedate donde estás.</p>',
+    onOk:()=>{
+      if(S.yo){
+        const p=Object.assign({cupo:S.yo.cupo,nombre:S.yo.nombre,valor:(S.pulso[S.yo.cupo]||{}).valor||85},{ayuda:true});
+        S.pulso[S.yo.cupo]=p; nube("pulso",String(S.yo.cupo),p); pintar();
+      }
+      aviso("Ya les avisamos. Van para tu lado.");
+      return true;
+    }
+  });
+}
+
+/* ============================================================ ANFITRIÓN */
+function panelAnfitrion(){
+  const ayudas=Object.values(S.pulso).filter(p=>p.ayuda);
+  const gente=MESA.filter(m=>m.nombre!=="Cupo libre");
+  const conRest=gente.filter(m=>m.restricciones);
+  const prom=(()=>{ const v=Object.values(S.pulso).map(p=>Number(p.valor)||0); return v.length?Math.round(v.reduce((a,b)=>a+b,0)/v.length):null; })();
+
+  hoja({
+    titulo:"Anfitrión", pie:false,
+    cuerpo:
+      '<div class="campo"><label>En qué momento está la noche</label><div class="opciones">'
+      + [["antes","Antes"],["curso","En la mesa"],["despues","El día después"]].map(([k,l])=>
+          '<button type="button" class="op" data-act="fase" data-k="'+k+'" aria-pressed="'+(S.fase===k)+'">'+l+'</button>').join("")
+      + '</div></div>'
+
+      + '<div class="campo"><label>Paso que se está sirviendo</label>'
+      + '<div class="fila" style="gap:10px">'
+      + '<button type="button" class="bt" data-act="paso-menos" style="flex:0 0 auto">'+I.atras+'</button>'
+      + '<div style="flex:1 1 auto;text-align:center">'
+      + '<div style="font-family:var(--f-titulo);font-weight:800;font-size:42px;line-height:1;color:var(--brasa)">'
+      + (S.paso===0?"—":String(S.paso).padStart(2,"0"))+'</div>'
+      + '<div style="font-size:13px;color:var(--humo);margin-top:4px">'
+      + (S.paso===0?"todavía no arrancó":esc(paso(S.paso)?paso(S.paso).plato:""))+'</div></div>'
+      + '<button type="button" class="bt pri" data-act="paso-mas" style="flex:0 0 auto">'+I.ade+'</button>'
+      + '</div>'
+      + '<span class="pista">Cuando lo cambiás, los teléfonos de la mesa cambian solos.</span></div>'
+
+      + '<hr class="regla">'
+
+      + (ayudas.length
+         ? '<div class="tarjeta" style="border-color:var(--alerta);background:rgba(222,49,38,.12)">'
+           + '<div class="rotulo" style="color:var(--alerta);margin-bottom:8px">Piden un momento</div>'
+           + ayudas.map(p=>'<div style="font-size:16px;font-weight:600">'+esc(p.nombre)+' <span class="dato" style="color:var(--humo);font-size:13px">cupo '+p.cupo+'</span></div>').join("")
+           + '<button type="button" class="bt chico" data-act="listo-ayuda" style="margin-top:12px">Ya los atendimos</button></div>'
+         : '')
+
+      + '<div class="campo"><label>El pulso de la mesa'+(prom!=null?' — promedio '+prom:'')+'</label>'
+      + '<div class="anf-mesa">'
+      + gente.map(m=>{
+          const p=S.pulso[m.cupo];
+          const v=p?clamp(Number(p.valor)||0,0,100):0;
+          return '<div class="anf-p'+(p&&p.ayuda?" pide":"")+'">'
+            + '<div class="nn">'+esc(m.nombre.split(" ")[0])+'</div>'
+            + '<div class="bar"><i style="width:'+v+'%"></i></div>'
+            + (p?(p.ayuda?'<div class="pd">pide pausa</div>':'<div class="dato" style="font-size:10px;color:var(--humo);margin-top:5px">'+v+'</div>')
+               :'<div class="dato" style="font-size:10px;color:var(--humo);margin-top:5px">—</div>')
+            + '</div>';
+        }).join("")
+      + '</div>'
+      + '<span class="pista">Si la mesa promedia alto, bajá la temperatura del próximo paso.</span></div>'
+
+      + (conRest.length
+         ? '<div class="campo"><label>Restricciones cargadas</label><div class="dl">'
+           + conRest.map(m=>par(m.nombre.split(" ")[0]+" · cupo "+m.cupo, esc(m.restricciones))).join("")
+           + '</div></div>'
+         : '<div class="campo"><label>Restricciones</label><span class="pista">Todavía nadie cargó nada.</span></div>')
+
+      + '<hr class="regla">'
+
+      + '<div class="campo"><label>El logo</label>'
+      + '<div class="fila"><button type="button" class="bt chico" data-act="subir-logo">Subir el logo real</button>'
+      + (S.logoUrl?'<button type="button" class="bt chico plano" data-act="quitar-logo">Quitar</button>':'')+'</div>'
+      + '<span class="pista">'+(ASSETS?"PNG o JPG cuadrado. Lo ven todos los de la mesa.":"Hace falta estar conectado a la nube para subirlo.")+'</span></div>'
+
+      + '<div class="fila" style="margin-top:6px">'
+      + '<button type="button" class="bt" data-act="cerrar" style="flex:1 1 auto">Cerrar</button>'
+      + '<button type="button" class="bt plano" data-act="salir-mesa">Cambiar de comensal</button></div>'
+  });
+}
+
+/* ============================================================ fotos */
+function reducir(file,max){
+  return new Promise((res,rej)=>{
+    const fr=new FileReader();
+    fr.onerror=()=>rej(new Error("lectura"));
+    fr.onload=()=>{
+      const im=new Image();
+      im.onerror=()=>rej(new Error("imagen"));
+      im.onload=()=>{
+        const e=Math.min(1,max/Math.max(im.width,im.height));
+        const c=document.createElement("canvas");
+        c.width=Math.round(im.width*e); c.height=Math.round(im.height*e);
+        c.getContext("2d").drawImage(im,0,0,c.width,c.height);
+        const url=c.toDataURL("image/jpeg",.74);
+        c.toBlob(b=>res({blob:b,url:url}), "image/jpeg",.74);
+      };
+      im.src=fr.result;
+    };
+    fr.readAsDataURL(file);
+  });
+}
+function sumarFoto(){
+  const p=pasoActual(); if(!p) return;
+  const inp=document.createElement("input");
+  inp.type="file"; inp.accept="image/*"; inp.setAttribute("capture","environment");
+  inp.addEventListener("change",async()=>{
+    const f=inp.files&&inp.files[0]; if(!f) return;
+    aviso("Guardando la foto…");
+    try{
+      const r=await reducir(f,1100);
+      let url=r.url;
+      if(ASSETS&&r.blob){
+        try{ const a=await ASSETS.upload(r.blob); url="/_blob/"+a.id; }
+        catch(e){ if(e&&e.code==="too_large"){ aviso("La foto pesa demasiado."); return; } }
+      }
+      const foto={id:uid("f"),pasoN:p.n,url:url,cupo:S.yo?S.yo.cupo:0,nombre:S.yo?S.yo.nombre:""};
+      S.fotos=S.fotos.concat([foto]);
+      try{ guardar(); }catch(e){}
+      nube("fotos",foto.id,foto); pintar(); aviso("Quedó en el álbum");
+    }catch(e){ aviso("No se pudo guardar esa foto."); }
+  });
+  inp.click();
+}
+
+/* ============================================================ el pulso */
+function ponerPulso(v){
+  if(!S.yo) return;
+  v=clamp(Math.round(v),0,100);
+  const p=Object.assign({},S.pulso[S.yo.cupo]||{},{cupo:S.yo.cupo,nombre:S.yo.nombre,valor:v});
+  S.pulso[S.yo.cupo]=p;
+  const riel=$("#riel");
+  if(riel){
+    riel.setAttribute("aria-valuenow",v);
+    $(".pulso-lleno",riel).style.width=v+"%";
+    $(".pulso-perilla",riel).style.left=v+"%";
+    const l=$(".pulso-lectura"); if(l) l.textContent=textoPulso(v);
+  }
+  clearTimeout(ponerPulso._t);
+  ponerPulso._t=setTimeout(()=>nube("pulso",String(S.yo.cupo),p),450);
+}
+function rielDesde(ev,riel){
+  const r=riel.getBoundingClientRect();
+  const x=(ev.touches?ev.touches[0].clientX:ev.clientX)-r.left;
+  return clamp(100*x/Math.max(1,r.width),0,100);
+}
+document.addEventListener("pointerdown",e=>{
+  const riel=e.target.closest("#riel"); if(!riel) return;
+  riel.setPointerCapture&&riel.setPointerCapture(e.pointerId);
+  ponerPulso(rielDesde(e,riel));
+  const mover=ev=>ponerPulso(rielDesde(ev,riel));
+  const soltar=()=>{ document.removeEventListener("pointermove",mover); document.removeEventListener("pointerup",soltar); };
+  document.addEventListener("pointermove",mover);
+  document.addEventListener("pointerup",soltar);
+});
+document.addEventListener("keydown",e=>{
+  if(e.target.id!=="riel") return;
+  const a=S.yo?(S.pulso[S.yo.cupo]||{}).valor||50:50;
+  if(e.key==="ArrowRight"||e.key==="ArrowUp"){ e.preventDefault(); ponerPulso(a+5); }
+  if(e.key==="ArrowLeft"||e.key==="ArrowDown"){ e.preventDefault(); ponerPulso(a-5); }
+});
+
+/* ============================================================ la vela */
+let velaT=null;
+function despertar(){
+  document.body.classList.remove("velando");
+  clearTimeout(velaT);
+  if(S.fase!=="curso"||!S.yo) return;
+  velaT=setTimeout(()=>{
+    const a=document.activeElement;
+    if(a&&/^(INPUT|TEXTAREA)$/.test(a.tagName)) return despertar();
+    if(!$("#velo").hidden) return despertar();
+    document.body.classList.add("velando");
+  },28000);
+}
+["pointerdown","keydown","touchstart","focusin"].forEach(ev=>
+  document.addEventListener(ev,despertar,{passive:true}));
+
+/* ============================================================ eventos */
+let toquesSello=0, selloT=null;
+document.addEventListener("click",function(e){
+  const t=e.target.closest("[data-act],[data-rest],#sello");
+  if(!t) return;
+
+  if(t.id==="sello"){
+    toquesSello++; clearTimeout(selloT);
+    selloT=setTimeout(()=>{toquesSello=0;},1400);
+    if(toquesSello>=4){ toquesSello=0; panelAnfitrion(); }
+    return;
+  }
+  if(t.dataset.rest!=null){
+    e.preventDefault();
+    t.setAttribute("aria-pressed", t.getAttribute("aria-pressed")==="true"?"false":"true");
+    return;
+  }
+
+  const a=t.dataset.act;
+  if(a!=="ok"&&a!=="cerrar") e.preventDefault();
+
+  switch(a){
+    case "ok": e.preventDefault(); if(!alOk||alOk()!==false) cerrar(); break;
+    case "cerrar": e.preventDefault(); cerrar(); break;
+
+    case "soy":
+      S.yo={cupo:parseInt(t.dataset.cupo,10),nombre:t.dataset.nombre};
+      guardar(); pintar(); despertar();
+      aviso("Hola, "+S.yo.nombre.split(" ")[0]);
+      break;
+    case "soy-otro":
+      hoja({titulo:"¿Cómo te llamás?", si:"Entrar",
+        cuerpo:'<div class="campo"><label>Tu nombre</label>'
+          + '<input class="ent" name="nombre" id="nomOtro" placeholder="Nombre y apellido" autocomplete="name"></div>',
+        onOk:()=>{
+          const v=campos(); if(!String(v.nombre||"").trim()){ aviso("Poné tu nombre."); return false; }
+          const libre=MESA.find(m=>m.nombre==="Cupo libre");
+          S.yo={cupo:libre?libre.cupo:99,nombre:v.nombre.trim()};
+          if(libre) libre.nombre=S.yo.nombre;
+          guardar(); pintar(); despertar(); return true;
+        }});
+      break;
+
+    case "sug":{
+      const w=t.dataset.w;
+      const inp=$("#miPalabra"); if(inp) inp.value=w;
+      $$(".sug[data-act=sug]").forEach(b=>b.setAttribute("aria-pressed",String(b===t)));
+      break;
+    }
+    case "decir": decir(); break;
+    case "cambiar":{
+      const p=pasoActual();
+      const mias=misPalabras(p.n);
+      S.palabras=S.palabras.filter(x=>mias.indexOf(x)<0);
+      if(DB) mias.forEach(m=>{ DB.doc("palabras/"+m.id).delete().catch(err); });
+      guardar(); pintar();
+      break;
+    }
+    case "ver": S.verPaso=parseInt(t.dataset.n,10); pintar(); window.scrollTo(0,0); break;
+    case "volver-actual": S.verPaso=null; pintar(); window.scrollTo(0,0); break;
+
+    case "restricciones": formRestricciones(); break;
+    case "ayuda": pedirAyuda(); break;
+    case "foto": sumarFoto(); break;
+
+    /* anfitrión */
+    case "fase": estadoNube({fase:t.dataset.k, verPaso:null}); panelAnfitrion(); break;
+    case "paso-mas": estadoNube({paso:clamp(S.paso+1,0,PASOS.length), verPaso:null}); panelAnfitrion(); break;
+    case "paso-menos": estadoNube({paso:clamp(S.paso-1,0,PASOS.length), verPaso:null}); panelAnfitrion(); break;
+    case "listo-ayuda":
+      Object.keys(S.pulso).forEach(k=>{
+        if(S.pulso[k].ayuda){ S.pulso[k]=Object.assign({},S.pulso[k],{ayuda:false}); nube("pulso",k,S.pulso[k]); }
+      });
+      panelAnfitrion(); pintar();
+      break;
+    case "subir-logo": subirLogo(); break;
+    case "quitar-logo": estadoNube({logoUrl:""}); panelAnfitrion(); break;
+    case "salir-mesa": S.yo=null; try{localStorage.removeItem(LS_YO);}catch(x){} cerrar(); pintar(); break;
+  }
+});
+
+function decir(){
+  const p=pasoActual(); if(!p||!S.yo) return;
+  const inp=$("#miPalabra");
+  const w=String(inp?inp.value:"").trim();
+  if(!w){ aviso("Tocá una palabra o escribí la tuya."); if(inp) inp.focus(); return; }
+  const o={id:uid("p"),pasoN:p.n,cupo:S.yo.cupo,nombre:S.yo.nombre,palabra:w.slice(0,28)};
+  S.palabras=S.palabras.concat([o]);
+  guardar(); nube("palabras",o.id,o); pintar();
+  aviso("Sumada a la mesa");
+}
+
+document.addEventListener("submit",e=>{
+  if(e.target.id==="hojaForm"){ e.preventDefault(); if(!alOk||alOk()!==false) cerrar(); }
+});
+document.addEventListener("keydown",e=>{
+  if(e.key==="Escape"&&!$("#velo").hidden) cerrar();
+  if(e.key==="Enter"&&e.target.id==="miPalabra"){ e.preventDefault(); decir(); }
+});
+$("#velo").addEventListener("click",e=>{ if(e.target.id==="velo") cerrar(); });
+document.addEventListener("click",e=>{
+  const op=e.target.closest(".op[data-op]");
+  if(!op) return;
+  $$(".op[data-op='"+op.dataset.op+"']").forEach(b=>b.setAttribute("aria-pressed","false"));
+  op.setAttribute("aria-pressed","true");
+});
+
+async function subirLogo(){
+  if(!ASSETS){ aviso("Hace falta estar conectado a la nube."); return; }
+  const inp=document.createElement("input");
+  inp.type="file"; inp.accept="image/png,image/jpeg,image/webp,image/svg+xml";
+  inp.addEventListener("change",async()=>{
+    const f=inp.files&&inp.files[0]; if(!f) return;
+    try{
+      const r=await ASSETS.upload(f);
+      estadoNube({logoUrl:"/_blob/"+r.id});
+      cerrar(); aviso("Logo puesto");
+    }catch(e){ aviso("No se pudo subir el logo."); }
+  });
+  inp.click();
+}
+
+/* ============================================================ arranque */
+leer();
+if(location.hash==="#anfitrion") setTimeout(panelAnfitrion,300);
+pintar();
+despertar();
+conectar();
+
+})();
+</script>

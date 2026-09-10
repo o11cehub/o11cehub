@@ -11,8 +11,8 @@
    ============================================================ */
 :root{
   /* --- marca (editable desde la pantalla Marca) --- */
-  --brand-accent:#E0561F;         /* brasa */
-  --brand-accent-lt:#B8431A;      /* brasa sobre fondo claro */
+  --brand-accent:#E9541D;         /* naranja del círculo del logo */
+  --brand-accent-lt:#BA4317;      /* el mismo, oscurecido para fondo claro */
   --brand-second:#C4862B;         /* resina */
   --brand-second-lt:#8F5F13;
 
@@ -156,7 +156,7 @@ a{color:var(--ember)}
   background:var(--surface-3); border:1px solid var(--line);
 }
 .brandmark .logo img{width:100%;height:100%;object-fit:cover;display:block}
-.brandmark .logo svg{width:26px;height:26px;display:block}
+.brandmark .logo svg{width:100%;height:100%;display:block}
 .brandmark .bn{display:flex;flex-direction:column;min-width:0}
 .brandmark .bn b{
   font-family:var(--f-display); font-weight:800; font-size:19px;
@@ -519,7 +519,7 @@ select.inp{cursor:pointer}
   display:grid;place-items:center;background:var(--surface-3);border:1px solid var(--line);
 }
 .logo-prev img{width:100%;height:100%;object-fit:cover;display:block}
-.logo-prev svg{width:38px;height:38px}
+.logo-prev svg{width:100%;height:100%;display:block}
 
 /* ============================================================ tabs móviles */
 .tabbar{display:none}
@@ -560,7 +560,7 @@ select.inp{cursor:pointer}
   <nav class="rail" aria-label="Secciones">
     <div class="brandmark">
       <span class="logo" id="railLogo"></span>
-      <span class="bn"><b id="railName">Sticky Knife</b><span>Mesa</span></span>
+      <span class="bn"><b id="railName">Sticky Knife</b><span>Sabores y terpenos</span></span>
     </div>
     <button class="navbtn" data-go="inicio" aria-current="true">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 4l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/><path d="M9 21v-7h6v7"/></svg>
@@ -674,7 +674,12 @@ const I = {
   plata:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="6" width="19" height="12" rx="2"/><circle cx="12" cy="12" r="2.6"/></svg>',
   baja:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="M6 13l6 6 6-6"/></svg>',
   copia:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/></svg>',
-  cuchillo:'<svg viewBox="0 0 32 32" fill="none"><path d="M5 21.5 21.5 5c1.6 3.4 2 6.6 1.2 9.6-.8 3-2.7 5.7-5.6 8.1L14 25.6a1.4 1.4 0 0 1-1.9-.1l-7-7a1.4 1.4 0 0 1-.1-1.9z" fill="currentColor" opacity=".92"/><path d="M12.4 24.8 8 29.2a2 2 0 0 1-2.8-2.8l4.4-4.4z" fill="currentColor" opacity=".55"/><circle cx="24.5" cy="22.5" r="3.6" fill="var(--brand-second)"/></svg>'
+  cuchillo:'<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" fill="var(--ember)"/>'
+    +'<g stroke="#141414" stroke-width="3.4" stroke-linejoin="round">'
+    +'<path d="M78 20 L36 62 L26 80 L44 70 L86 28 Z" fill="#F0E9D6"/>'
+    +'<path d="M78 20 L86 28 L93 21 a5.6 5.6 0 0 0-8-8 Z" fill="#8A241A"/>'
+    +'<g fill="#3E5C2C"><circle cx="26" cy="72" r="11"/><circle cx="42" cy="80" r="8"/>'
+    +'<circle cx="58" cy="56" r="8.5"/><circle cx="70" cy="46" r="6"/></g></g></svg>'
 };
 
 /* ---------------------------------------------------------- constantes */
@@ -693,8 +698,8 @@ const TIPOS_EXTRACTO = ["Live rosin","Hash rosin","Bubble hash","Static sift","L
 /* ---------------------------------------------------------- estado */
 const MARCA_DEF = {
   nombre:"Sticky Knife",
-  acento:"#E0561F",
-  acentoClaro:"#B8431A",
+  acento:"#E9541D",
+  acentoClaro:"#BA4317",
   segundo:"#C4862B",
   segundoClaro:"#8F5F13",
   moneda:"ARS",
